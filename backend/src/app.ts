@@ -1,23 +1,32 @@
-import express from "express";
-var cookieParser = require("cookie-parser");
-var logger = require("morgan");
-import airportRouter from "./resources/airport/router"
+
+import express from 'express';
+const cookieParser = require('cookie-parser');
+const logger = require('morgan');
+import airportRouter from './resources/airport/router';
 import userRouter from "./resources/user/router"
+import authRouter from './resources/auth/router';
 
 
+// App initialisation
+const app = express();
 
-var app = express();
-
-app.use(logger("dev"));
+// MiddleWares
+app.use(logger('dev'));
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
 app.use(cookieParser());
 
-app.use("/airports", airportRouter);
+// Auth
+app.use(authRouter);
+
+// Routes
+app.use('/airports', airportRouter);
 app.use("/users", userRouter)
 
-app.all("*", (req, res) => {
-  res.json({ msg: "ok" });
+
+// Catch All
+app.all('*', (req, res) => {
+  res.json({ msg: 'ok' });
 });
 
 module.exports = app;
