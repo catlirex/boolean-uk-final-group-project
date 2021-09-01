@@ -61,8 +61,8 @@ model FlightNumber {
 //Scheduled Flight
 model ScheduledFlight {
   id              Int          @id @default(autoincrement())
-  date            DateTime     @db.Date
-  time            DateTime     @db.Time(0)
+  date            Int
+  time            String
   economicPrice   Float
   businessPrice   Float
   firstClassPrice Float
@@ -85,7 +85,9 @@ model User {
   firstName String
   lastName  String
   password  String
-  email     String 
+
+  email     String    @unique
+
   booking   Booking[]
 }
 
