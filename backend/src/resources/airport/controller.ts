@@ -1,4 +1,4 @@
-import { Request, Response, urlencoded } from "express";
+import { Request, Response } from "express";
 import  dbClient from "../../utils/database";
 
 const {airport} = dbClient

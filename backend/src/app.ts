@@ -1,8 +1,11 @@
+
 import express from 'express';
 const cookieParser = require('cookie-parser');
 const logger = require('morgan');
 import airportRouter from './resources/airport/router';
+import userRouter from "./resources/user/router"
 import authRouter from './resources/auth/router';
+
 
 // App initialisation
 const app = express();
@@ -18,6 +21,8 @@ app.use(authRouter);
 
 // Routes
 app.use('/airports', airportRouter);
+app.use("/users", userRouter)
+
 
 // Catch All
 app.all('*', (req, res) => {
