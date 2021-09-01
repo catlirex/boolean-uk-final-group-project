@@ -49,12 +49,14 @@ const createUser = (req, res) => __awaiter(void 0, void 0, void 0, function* () 
         res.cookie('token', token, { httpOnly: true });
         res.json({
             user: {
-                username: savedUser.username,
+                firstName: savedUser.firstName,
+                lastName: savedUser.lastName,
                 email: savedUser.email,
             },
         });
     }
     catch (error) {
+        console.log(error);
         // if (error.message.includes('Unique constraint failed'))
         res.status(400).json({ error: 'username/email exists' });
     }
