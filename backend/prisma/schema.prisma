@@ -58,14 +58,14 @@ model FlightNumber {
   ScheduledFlight    ScheduledFlight[]
 }
 
-enum FlightStatus{
-  SCHEDULED 
-  BOARDING 
-  CHECKIN 
-  FINALCALL 
-  DELAYED 
+enum FlightStatus {
+  SCHEDULED
+  BOARDING
+  CHECKIN
+  FINALCALL
+  DELAYED
   CANCELLED
-  DEPARTED 
+  DEPARTED
   ARRIVED
 }
 
@@ -77,7 +77,7 @@ model ScheduledFlight {
   economicPrice   Float
   businessPrice   Float
   firstClassPrice Float
-  status        FlightStatus @default(SCHEDULED)
+  status          FlightStatus @default(SCHEDULED)
   gateNumber      String
   flightNumberId  String
   flightNumber    FlightNumber @relation(fields: [flightNumberId], references: [id], onDelete: Cascade, onUpdate: Cascade)
@@ -92,15 +92,15 @@ enum Role {
 
 // User
 model User {
-  id        Int       @id @default(autoincrement())
-  role      Role      @default(USER)
+  id        Int    @id @default(autoincrement())
+  role      Role   @default(USER)
   firstName String
   lastName  String
   password  String
 
-  email     String    @unique
+  email String @unique
 
-  booking   Booking[]
+  booking Booking[]
 }
 
 // Booking

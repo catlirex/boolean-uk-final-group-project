@@ -1,4 +1,4 @@
-import { PrismaClient, Role } from "@prisma/client";
+import { PrismaClient, Role, FlightStatus } from "@prisma/client";
 import faker from "faker";
 const prisma = new PrismaClient();
 const {
@@ -85,6 +85,16 @@ async function seed() {
 
   const createdFlightNumberList = [];
   const createdScheduleFlightList = [];
+  const flightStatusArray = [
+    "SCHEDULED",
+    "BOARDING",
+    "CHECKIN",
+    "FINALCALL",
+    "DELAYED",
+    "CANCELLED",
+    "DEPARTED",
+    "ARRIVED",
+  ];
   for (const flightNumber of flightNumberList) {
     const { airlineId, ...flightData } = flightNumber;
     const createdFlightNumber = await prisma.flightNumber.create({
@@ -110,6 +120,7 @@ async function seed() {
         firstClassPrice: getRandomInt(300, 1000),
         gateNumber: "A" + getRandomInt(1, 50),
         flightNumber: { connect: { id: createdFlightNumber.id } },
+        status: getRandomElement(flightStatusArray) as FlightStatus,
       };
 
       const createdScheduleFlight = await prisma.scheduledFlight.create({
