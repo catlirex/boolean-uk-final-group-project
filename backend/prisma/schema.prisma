@@ -85,7 +85,9 @@ model User {
   firstName String
   lastName  String
   password  String
+
   email     String    @unique
+
   booking   Booking[]
 }
 
