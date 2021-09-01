@@ -5,6 +5,8 @@ const logger = require('morgan');
 import airportRouter from './resources/airport/router';
 import userRouter from "./resources/user/router"
 import authRouter from './resources/auth/router';
+import scheduledFlightRouter from './resources/scheduledFlight/router';
+
 
 
 // App initialisation
@@ -19,9 +21,14 @@ app.use(cookieParser());
 // Auth
 app.use(authRouter);
 
-// Routes
+// Airport
 app.use('/airports', airportRouter);
+
+//User
 app.use("/users", userRouter)
+
+//Scheduled Flight
+app.use("/scheduledFlight", scheduledFlightRouter)
 
 
 // Catch All
