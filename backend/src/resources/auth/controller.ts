@@ -1,4 +1,5 @@
 import { Request, Response } from 'express';
+import { error } from 'node:console';
 import { findUserWithValidation, createdWithHash } from './services';
 
 import { createToken } from '../../utils/authGenerator';
@@ -22,8 +23,8 @@ export const loginUser = async (req: Request, res: Response) => {
         email: loggedUser.email,
       },
     });
-  } catch (e) {
-    res.status(401).json({ error: e.message });
+  } catch (error) {
+    res.status(401).json({ error: error });
   }
 };
 
@@ -50,9 +51,8 @@ export const createUser = async (req: Request, res: Response) => {
         email: savedUser.email,
       },
     });
-  } catch (e) {
-    if (e.message.includes('Unique constraint failed'))
-      res.status(400).json({ error: 'username/email exists' });
-    console.log(e.message);
+  } catch (error) {
+    // if (error.message.includes('Unique constraint failed'))
+    res.status(400).json({ error: 'username/email exists' });
   }
 };

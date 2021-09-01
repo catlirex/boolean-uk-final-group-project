@@ -28,8 +28,8 @@ const loginUser = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
             },
         });
     }
-    catch (e) {
-        res.status(401).json({ error: e.message });
+    catch (error) {
+        res.status(401).json({ error: error });
     }
 });
 exports.loginUser = loginUser;
@@ -54,10 +54,9 @@ const createUser = (req, res) => __awaiter(void 0, void 0, void 0, function* () 
             },
         });
     }
-    catch (e) {
-        if (e.message.includes('Unique constraint failed'))
-            res.status(400).json({ error: 'username/email exists' });
-        console.log(e.message);
+    catch (error) {
+        // if (error.message.includes('Unique constraint failed'))
+        res.status(400).json({ error: 'username/email exists' });
     }
 });
 exports.createUser = createUser;
