@@ -4,7 +4,7 @@ import { compare, hash } from 'bcrypt';
 
 export const findUserWithValidation = async (userData: User) => {
   const foundUser = await dbClient.user.findUnique({
-    where: { username: userData.firstName },
+    where: { email: userData.email },
   });
 
   if (!foundUser) throw new Error('Username/Password incorrect');
