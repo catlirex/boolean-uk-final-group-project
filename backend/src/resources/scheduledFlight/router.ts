@@ -5,7 +5,7 @@ import {
   updatedScheduledFlight,
   getScheduledFlightsByFlightNumber,
   getScheduledFlightsByDateDepartureArrival,
-  // getScheduledFlightStockByClass,
+  getScheduledFlightStockByClass,
 } from "./controller";
 // import {} from "./controller";
 
@@ -14,8 +14,8 @@ const router = Router();
 router.get("/arrival/:airportCode", scheduledFlightByArrivalAirportCode);
 router.get("/departure/:airportCode", scheduledFlightByDepartureAirportCode);
 router.patch("/update/:id", updatedScheduledFlight);
+router.get("/:id/remainTickets", getScheduledFlightStockByClass);
 router.get("/:flightNumber", getScheduledFlightsByFlightNumber);
 router.get("/", getScheduledFlightsByDateDepartureArrival);
-// router.get("/:id/stock", getScheduledFlightStockByClass);
 
 export default router;

@@ -12,9 +12,9 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.getScheduledFlightsByDateDepartureArrival = exports.getScheduledFlightsByFlightNumber = exports.updatedScheduledFlight = exports.scheduledFlightByDepartureAirportCode = exports.scheduledFlightByArrivalAirportCode = void 0;
+exports.getScheduledFlightStockByClass = exports.getScheduledFlightsByDateDepartureArrival = exports.getScheduledFlightsByFlightNumber = exports.updatedScheduledFlight = exports.scheduledFlightByDepartureAirportCode = exports.scheduledFlightByArrivalAirportCode = void 0;
 const database_1 = __importDefault(require("../../utils/database"));
-const { scheduledFlight } = database_1.default;
+const { scheduledFlight, ticket } = database_1.default;
 const scheduledFlightByArrivalAirportCode = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     const id = req.params.airportCode;
     try {
@@ -148,39 +148,45 @@ const getScheduledFlightsByDateDepartureArrival = (req, res) => __awaiter(void 0
     }
 });
 exports.getScheduledFlightsByDateDepartureArrival = getScheduledFlightsByDateDepartureArrival;
-// get	/scheduledFlight/stock/:id?class=business
-// export const getScheduledFlightStockByClass = async (
-//   req: Request,
-//   res: Response
-// ) => {
-//   const id = parseInt(req.params.id);
-//   const classToCheck = req.query;
-//   try {
-//     const foundflight = await scheduledFlight.findUnique({
-//       where: {
-//         id,
-//       },
-//     });
-//     if (classToCheck) {
-//       const foundClass = await scheduledFlight.findMany({
-//         where: {
-//           id,
-//         },
-//         include: {
-//           passengers: {
-//             every: {
-//               class: classToCheck.class,
-//             },
-//           },
-//         },
-//       });
-//       res.json({ data: foundClass });
-//     }
-//   } catch (error) {
-//     console.log(error);
-//     res.json({ error: error });
-//   }
-// };
+// get	/scheduledFlight/:id/remainTicket/?class=business
+const getScheduledFlightStockByClass = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+    const id = parseInt(req.params.id);
+    const classToCheck = req.query;
+    try {
+        if (classToCheck.class) {
+            const foundTicket = yield ticket.findMany({
+                where: {
+                    scheduledFlightId: id,
+                    class: classToCheck.class,
+                },
+            });
+            const seatForTheClass = yield scheduledFlight.findUnique({
+                where: { id },
+                include: { flightNumber: { include: { aircraft: true } } },
+            });
+            if (classToCheck.class === "first")
+                res.json({
+                    ticketRemain: seatForTheClass.flightNumber.aircraft.firstClassSeatNumber -
+                        foundTicket.length,
+                });
+            if (classToCheck.class === "business")
+                res.json({
+                    ticketRemain: seatForTheClass.flightNumber.aircraft.businessSeatNumber -
+                        foundTicket.length,
+                });
+            if (classToCheck.class === "econ")
+                res.json({
+                    ticketRemain: seatForTheClass.flightNumber.aircraft.econSeatNumber -
+                        foundTicket.length,
+                });
+        }
+    }
+    catch (error) {
+        console.log(error);
+        res.json({ error: error });
+    }
+});
+exports.getScheduledFlightStockByClass = getScheduledFlightStockByClass;
 // _count: {
 //   select: {
 //     passengers: {

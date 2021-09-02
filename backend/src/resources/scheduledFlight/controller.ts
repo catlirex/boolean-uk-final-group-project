@@ -2,7 +2,7 @@ import { Request, Response } from "express";
 
 import dbClient from "../../utils/database";
 
-const { scheduledFlight } = dbClient;
+const { scheduledFlight, ticket } = dbClient;
 
 export const scheduledFlightByArrivalAirportCode = async (
   req: Request,
@@ -154,44 +154,54 @@ export const getScheduledFlightsByDateDepartureArrival = async (
   }
 };
 
-// get	/scheduledFlight/stock/:id?class=business
+// get	/scheduledFlight/:id/remainTicket/?class=business
 
-// export const getScheduledFlightStockByClass = async (
-//   req: Request,
-//   res: Response
-// ) => {
-//   const id = parseInt(req.params.id);
+export const getScheduledFlightStockByClass = async (
+  req: Request,
+  res: Response
+) => {
+  const id = parseInt(req.params.id);
 
-//   const classToCheck = req.query;
+  const classToCheck = req.query;
 
-//   try {
-//     const foundflight = await scheduledFlight.findUnique({
-//       where: {
-//         id,
-//       },
-//     });
+  try {
+    if (classToCheck.class) {
+      const foundTicket = await ticket.findMany({
+        where: {
+          scheduledFlightId: id,
+          class: classToCheck.class,
+        },
+      });
+      const seatForTheClass = await scheduledFlight.findUnique({
+        where: { id },
+        include: { flightNumber: { include: { aircraft: true } } },
+      });
 
-//     if (classToCheck) {
-//       const foundClass = await scheduledFlight.findMany({
-//         where: {
-//           id,
-//         },
-//         include: {
-//           passengers: {
-//             every: {
-//               class: classToCheck.class,
-//             },
-//           },
-//         },
-//       });
-//       res.json({ data: foundClass });
-//     }
-//   } catch (error) {
-//     console.log(error);
+      if (classToCheck.class === "first")
+        res.json({
+          ticketRemain:
+            seatForTheClass.flightNumber.aircraft.firstClassSeatNumber -
+            foundTicket.length,
+        });
+      if (classToCheck.class === "business")
+        res.json({
+          ticketRemain:
+            seatForTheClass.flightNumber.aircraft.businessSeatNumber -
+            foundTicket.length,
+        });
+      if (classToCheck.class === "econ")
+        res.json({
+          ticketRemain:
+            seatForTheClass.flightNumber.aircraft.econSeatNumber -
+            foundTicket.length,
+        });
+    }
+  } catch (error) {
+    console.log(error);
 
-//     res.json({ error: error });
-//   }
-// };
+    res.json({ error: error });
+  }
+};
 
 // _count: {
 //   select: {
