@@ -7,6 +7,7 @@ const router = (0, express_1.Router)();
 router.get("/arrival/:airportCode", controller_1.scheduledFlightByArrivalAirportCode);
 router.get("/departure/:airportCode", controller_1.scheduledFlightByDepartureAirportCode);
 router.patch("/update/:id", controller_1.updatedScheduledFlight);
-router.get("/:flightNumber", controller_1.getScheduleFlightsByFlightNumber);
+router.get("/:flightNumber", controller_1.getScheduledFlightsByFlightNumber);
+router.get("/", controller_1.getScheduledFlightsByDateDepartureArrival);
 exports.default = router;
 //# sourceMappingURL=router.js.map

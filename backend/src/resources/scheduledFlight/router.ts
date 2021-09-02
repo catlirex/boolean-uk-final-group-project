@@ -3,7 +3,8 @@ import {
   scheduledFlightByArrivalAirportCode,
   scheduledFlightByDepartureAirportCode,
   updatedScheduledFlight,
-  getScheduleFlightsByFlightNumber,
+  getScheduledFlightsByFlightNumber,
+  getScheduledFlightsByDateDepartureArrival,
 } from "./controller";
 // import {} from "./controller";
 
@@ -12,6 +13,7 @@ const router = Router();
 router.get("/arrival/:airportCode", scheduledFlightByArrivalAirportCode);
 router.get("/departure/:airportCode", scheduledFlightByDepartureAirportCode);
 router.patch("/update/:id", updatedScheduledFlight);
-router.get("/:flightNumber", getScheduleFlightsByFlightNumber);
+router.get("/:flightNumber", getScheduledFlightsByFlightNumber);
+router.get("/", getScheduledFlightsByDateDepartureArrival);
 
 export default router;

@@ -1,4 +1,5 @@
 import { Request, Response } from "express";
+
 import dbClient from "../../utils/database";
 
 const { scheduledFlight } = dbClient;
@@ -89,7 +90,7 @@ export const updatedScheduledFlight = async (req: Request, res: Response) => {
 };
 
 // get	/scheduledFlight/:flightNumber?date=20211010
-export const getScheduleFlightsByFlightNumber = async (
+export const getScheduledFlightsByFlightNumber = async (
   req: Request,
   res: Response
 ) => {
@@ -121,4 +122,36 @@ export const getScheduleFlightsByFlightNumber = async (
 };
 
 // get	/scheduledFlight?date=2021-10-10&depart=airportCode&arrival=airportCode
+
+export const getScheduledFlightsByDateDepartureArrival = async (
+  req: Request,
+  res: Response
+) => {
+  const { date, depart, arrival } = req.query;
+
+  try {
+    if (date && depart && arrival) {
+      const result = await scheduledFlight.findMany({
+        where: {
+          date: Number(date),
+          flightNumber: {
+            is: {
+              departureAirportId: depart,
+              arrivalAirportId: arrival,
+            },
+          },
+        },
+        include: {
+          flightNumber: true,
+        },
+      });
+      res.json({ data: result });
+    }
+  } catch (error) {
+    console.log(error);
+
+    res.json({ error: error });
+  }
+};
+
 // get	/scheduledFlight/stock/:id?class=business
