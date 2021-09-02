@@ -1,4 +1,4 @@
-import { PrismaClient, Role, FlightStatus, TicketStatus } from "@prisma/client";
+import { PrismaClient, Role, TicketStatus } from "@prisma/client";
 import faker from "faker";
 const prisma = new PrismaClient();
 const {

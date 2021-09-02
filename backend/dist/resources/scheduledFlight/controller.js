@@ -12,7 +12,7 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.updatedScheduledFlight = exports.scheduledFlightByDepartureAirportCode = exports.scheduledFlightByArrivalAirportCode = void 0;
+exports.getScheduledFlightsByDateDepartureArrival = exports.getScheduledFlightsByFlightNumber = exports.updatedScheduledFlight = exports.scheduledFlightByDepartureAirportCode = exports.scheduledFlightByArrivalAirportCode = void 0;
 const database_1 = __importDefault(require("../../utils/database"));
 const { scheduledFlight } = database_1.default;
 const scheduledFlightByArrivalAirportCode = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
@@ -20,14 +20,14 @@ const scheduledFlightByArrivalAirportCode = (req, res) => __awaiter(void 0, void
     try {
         const schFlightByArrivalAirportCode = yield scheduledFlight.findMany({
             where: {
-                status: { in: [
-                        "DEPARTED", "ARRIVED"
-                    ] },
-                flightNumber: { is: {
+                status: { in: ["DEPARTED", "ARRIVED"] },
+                flightNumber: {
+                    is: {
                         arrivalAirportId: id,
-                    } }
+                    },
+                },
             },
-            include: { flightNumber: true }
+            include: { flightNumber: true },
         });
         res.json({ data: schFlightByArrivalAirportCode });
     }
@@ -42,19 +42,23 @@ const scheduledFlightByDepartureAirportCode = (req, res) => __awaiter(void 0, vo
     try {
         const schFlightByDepartureAirportCode = yield scheduledFlight.findMany({
             where: {
-                status: { in: [
+                status: {
+                    in: [
                         "SCHEDULED",
                         "BOARDING",
                         "CHECKIN",
                         "FINALCALL",
                         "DELAYED",
-                        "CANCELLED"
-                    ] },
-                flightNumber: { is: {
+                        "CANCELLED",
+                    ],
+                },
+                flightNumber: {
+                    is: {
                         departureAirportId: id,
-                    } }
+                    },
+                },
             },
-            include: { flightNumber: true }
+            include: { flightNumber: true },
         });
         res.json({ data: schFlightByDepartureAirportCode });
     }
@@ -68,12 +72,14 @@ const updatedScheduledFlight = (req, res) => __awaiter(void 0, void 0, void 0, f
     const id = parseInt(req.params.id);
     const updatedInfo = req.body;
     try {
-        const schedulFlightExist = yield scheduledFlight.findUnique({ where: { id } });
+        const schedulFlightExist = yield scheduledFlight.findUnique({
+            where: { id },
+        });
         if (schedulFlightExist) {
             const schedulFlightUpdate = yield scheduledFlight.update({
                 where: { id },
                 data: Object.assign(Object.assign({}, schedulFlightExist), updatedInfo),
-                include: { flightNumber: true }
+                include: { flightNumber: true },
             });
             res.json({ data: schedulFlightUpdate });
         }
@@ -86,4 +92,102 @@ const updatedScheduledFlight = (req, res) => __awaiter(void 0, void 0, void 0, f
     }
 });
 exports.updatedScheduledFlight = updatedScheduledFlight;
+// get	/scheduledFlight/:flightNumber?date=20211010
+const getScheduledFlightsByFlightNumber = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+    const flightQuery = req.query;
+    const id = req.params.flightNumber;
+    try {
+        const allScheduledFlightsByFlightNumber = yield scheduledFlight.findMany({
+            where: { flightNumberId: id },
+        });
+        if (flightQuery.date) {
+            const flightNumberQuery = Number(flightQuery.date);
+            const result = yield scheduledFlight.findMany({
+                where: {
+                    date: flightNumberQuery,
+                    flightNumberId: id,
+                },
+            });
+            res.json({ data: result });
+        }
+        else {
+            res.json({ data: allScheduledFlightsByFlightNumber });
+        }
+    }
+    catch (error) {
+        res.json({ error: error });
+        console.log(error);
+    }
+});
+exports.getScheduledFlightsByFlightNumber = getScheduledFlightsByFlightNumber;
+// get	/scheduledFlight?date=2021-10-10&depart=airportCode&arrival=airportCode
+const getScheduledFlightsByDateDepartureArrival = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+    const { date, depart, arrival } = req.query;
+    try {
+        if (date && depart && arrival) {
+            const result = yield scheduledFlight.findMany({
+                where: {
+                    date: Number(date),
+                    flightNumber: {
+                        is: {
+                            departureAirportId: depart,
+                            arrivalAirportId: arrival,
+                        },
+                    },
+                },
+                include: {
+                    flightNumber: true,
+                },
+            });
+            res.json({ data: result });
+        }
+    }
+    catch (error) {
+        console.log(error);
+        res.json({ error: error });
+    }
+});
+exports.getScheduledFlightsByDateDepartureArrival = getScheduledFlightsByDateDepartureArrival;
+// get	/scheduledFlight/stock/:id?class=business
+// export const getScheduledFlightStockByClass = async (
+//   req: Request,
+//   res: Response
+// ) => {
+//   const id = parseInt(req.params.id);
+//   const classToCheck = req.query;
+//   try {
+//     const foundflight = await scheduledFlight.findUnique({
+//       where: {
+//         id,
+//       },
+//     });
+//     if (classToCheck) {
+//       const foundClass = await scheduledFlight.findMany({
+//         where: {
+//           id,
+//         },
+//         include: {
+//           passengers: {
+//             every: {
+//               class: classToCheck.class,
+//             },
+//           },
+//         },
+//       });
+//       res.json({ data: foundClass });
+//     }
+//   } catch (error) {
+//     console.log(error);
+//     res.json({ error: error });
+//   }
+// };
+// _count: {
+//   select: {
+//     passengers: {
+//       class: {
+//         in: ["business", "economic", "firstclass"],
+//       },
+//     },
+//   },
+// },
 //# sourceMappingURL=controller.js.map
