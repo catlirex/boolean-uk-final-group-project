@@ -155,3 +155,50 @@ export const getScheduledFlightsByDateDepartureArrival = async (
 };
 
 // get	/scheduledFlight/stock/:id?class=business
+
+// export const getScheduledFlightStockByClass = async (
+//   req: Request,
+//   res: Response
+// ) => {
+//   const id = parseInt(req.params.id);
+
+//   const classToCheck = req.query;
+
+//   try {
+//     const foundflight = await scheduledFlight.findUnique({
+//       where: {
+//         id,
+//       },
+//     });
+
+//     if (classToCheck) {
+//       const foundClass = await scheduledFlight.findMany({
+//         where: {
+//           id,
+//         },
+//         include: {
+//           passengers: {
+//             every: {
+//               class: classToCheck.class,
+//             },
+//           },
+//         },
+//       });
+//       res.json({ data: foundClass });
+//     }
+//   } catch (error) {
+//     console.log(error);
+
+//     res.json({ error: error });
+//   }
+// };
+
+// _count: {
+//   select: {
+//     passengers: {
+//       class: {
+//         in: ["business", "economic", "firstclass"],
+//       },
+//     },
+//   },
+// },

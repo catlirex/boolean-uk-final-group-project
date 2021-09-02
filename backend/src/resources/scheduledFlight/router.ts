@@ -5,6 +5,7 @@ import {
   updatedScheduledFlight,
   getScheduledFlightsByFlightNumber,
   getScheduledFlightsByDateDepartureArrival,
+  // getScheduledFlightStockByClass,
 } from "./controller";
 // import {} from "./controller";
 
@@ -15,5 +16,6 @@ router.get("/departure/:airportCode", scheduledFlightByDepartureAirportCode);
 router.patch("/update/:id", updatedScheduledFlight);
 router.get("/:flightNumber", getScheduledFlightsByFlightNumber);
 router.get("/", getScheduledFlightsByDateDepartureArrival);
+// router.get("/:id/stock", getScheduledFlightStockByClass);
 
 export default router;
