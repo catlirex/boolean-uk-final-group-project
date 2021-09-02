@@ -11,6 +11,7 @@ const router_2 = __importDefault(require("./resources/user/router"));
 const router_3 = __importDefault(require("./resources/auth/router"));
 const router_4 = __importDefault(require("./resources/scheduledFlight/router"));
 const router_5 = __importDefault(require("./resources/booking/router"));
+const router_6 = __importDefault(require("./resources/ticket/router"));
 // App initialisation
 const app = (0, express_1.default)();
 // MiddleWares
@@ -26,7 +27,10 @@ app.use("/airports", router_1.default);
 app.use("/users", router_2.default);
 //Scheduled Flight
 app.use("/scheduledFlight", router_4.default);
+//Bookings
 app.use("/bookings", router_5.default);
+//Tickets
+app.use("/tickets", router_6.default);
 // Catch All
 app.all("*", (req, res) => {
     res.json({ msg: "ok" });
