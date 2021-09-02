@@ -12,6 +12,7 @@ const router_3 = __importDefault(require("./resources/auth/router"));
 const router_4 = __importDefault(require("./resources/scheduledFlight/router"));
 const router_5 = __importDefault(require("./resources/booking/router"));
 const router_6 = __importDefault(require("./resources/ticket/router"));
+const cors_1 = __importDefault(require("cors"));
 // App initialisation
 const app = (0, express_1.default)();
 // MiddleWares
@@ -19,6 +20,7 @@ app.use(logger("dev"));
 app.use(express_1.default.json());
 app.use(express_1.default.urlencoded({ extended: false }));
 app.use(cookieParser());
+app.use((0, cors_1.default)());
 // Auth
 app.use(router_3.default);
 // Airport
