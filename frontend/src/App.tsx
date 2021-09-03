@@ -4,12 +4,13 @@ import { Switch, Route } from "react-router-dom";
 import "./App.css";
 import useStore from "./store";
 import LoginHeader from "./Component/LoginHeader";
-import NoLoginHeader from "./Component/noLoginHeader";
+import ModalContainer from "./modals/ModalContainer";
 
 function App() {
-  const setAirportList = useStore((state) => state.setAirportList);
   const airportList = useStore((state) => state.airportList);
+  const setAirportList = useStore((state) => state.setAirportList);
   const loggedInUser = useStore((state) => state.loggedInUser);
+
 
   useEffect(() => {
     setAirportList();
@@ -24,6 +25,7 @@ function App() {
           <h3>Error 404 - mock mock</h3>
         </Route>
       </Switch>
+      <ModalContainer />
     </div>
   );
 }
