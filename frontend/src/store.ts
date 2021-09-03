@@ -4,6 +4,7 @@ import create from "zustand";
 type StoreType = {
   airportList: [] | null;
   setAirportList: () => void;
+  loggedInUser: null | {};
 };
 const useStore = create<StoreType>((set, get) => ({
   airportList: null,
@@ -13,7 +14,7 @@ const useStore = create<StoreType>((set, get) => ({
     ).then((res) => res.json());
     set({ airportList: airportsFromServer });
   },
-  loggedIinUser: null,
+  loggedInUser: null,
   setLoginUser: () => {},
   searchResult: null,
   setSearchResult: () => {},
