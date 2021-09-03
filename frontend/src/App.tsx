@@ -9,6 +9,8 @@ import ModalContainer from "./modals/ModalContainer";
 function App() {
   const airportList = useStore((state) => state.airportList);
   const setAirportList = useStore((state) => state.setAirportList);
+  const loggedInUser = useStore((state) => state.loggedInUser);
+
 
   useEffect(() => {
     setAirportList();
@@ -17,7 +19,7 @@ function App() {
 
   return (
     <div className="App">
-      <LoginHeader />
+      {loggedInUser ? <LoginHeader /> : <NoLoginHeader />}
       <Switch>
         <Route>
           <h3>Error 404 - mock mock</h3>

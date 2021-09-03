@@ -6,6 +6,7 @@ type StoreType = {
   setModal: (modal: string) => void;
   airportList: [] | null;
   setAirportList: () => void;
+  loggedInUser: null | {};
 };
 
 export type User = {
@@ -26,7 +27,7 @@ const useStore = create<StoreType>((set, get) => ({
     ).then((res) => res.json());
     set({ airportList: airportsFromServer });
   },
-  loggedIinUser: null,
+  loggedInUser: null,
   setLoginUser: () => {},
   searchResult: null,
   setSearchResult: () => {},
