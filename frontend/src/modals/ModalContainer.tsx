@@ -3,8 +3,8 @@ import React from "react";
 import { APP_COLOR } from "../consistent";
 import styled from "styled-components";
 import useStore from "../store";
-import LogInModal from "./logInModal";
-import SignUpModal from "./signUpModal";
+import LogInModal from "./LogInModal";
+import SignUpModal from "./SignUpModal";
 
 // const useStyles = makeStyles((theme) => ({
 //   modal: {
