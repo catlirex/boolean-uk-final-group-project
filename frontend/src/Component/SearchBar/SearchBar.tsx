@@ -5,9 +5,18 @@ import FlightIcon from "@material-ui/icons/Flight";
 import { TextField } from "@material-ui/core";
 import CompareArrowsIcon from "@material-ui/icons/CompareArrows";
 import SearchBarDate from "./SearchBarDate";
+import heroImg from "../../assets/fashion-model-beach-hat.jpeg";
+import heroImg3 from "../../assets/pexels-photo-2549084.jpeg";
+
+import SimpleSelect from "./SearchBarTravelSelect";
 
 const StyledSearchBarWrapper = styled.section`
-  background-color: ${APP_COLOR.lightGrey};
+  background-image: url(${heroImg3});
+  background-color: #cccccc;
+
+  background-position: center;
+  background-repeat: no-repeat;
+  background-size: cover;
   height: 100%;
   min-height: 25rem;
   overflow: hidden;
@@ -22,9 +31,9 @@ const StyledSearchBarFormContainer = styled.section`
 `;
 
 const StyledSearchBarMain = styled.section`
-  background-color: ${APP_COLOR.white};
-  width: 650px;
-  height: 350px;
+  background-color: transparent;
+  width: 500px;
+  height: 250px;
 
   .flight-icon-article {
     display: grid;
@@ -35,9 +44,18 @@ const StyledSearchBarMain = styled.section`
   .icon {
     transform: rotate(90deg);
     margin: 10px;
+    color: ${APP_COLOR.black};
+    cursor: pointer;
   }
   .flight-icon-p {
     margin: 10px;
+    color: ${APP_COLOR.black};
+    cursor: pointer;
+  }
+
+  .flight-icon-p:hover,
+  .icon:hover {
+    color: ${APP_COLOR.sharpPick};
   }
 `;
 
@@ -51,6 +69,11 @@ const StyledSearchBarFormSection = styled.section`
   }
   .form-svg {
     margin-top: 20px;
+  }
+
+  .travel {
+    display: grid;
+    justify-content: center;
   }
 `;
 
@@ -71,6 +94,9 @@ const SearchBarComponent = () => {
                 <TextField id="standard-basic" label="To" color="secondary" />
               </form>
               <SearchBarDate />
+              <div className="travel">
+                <SimpleSelect />
+              </div>
             </StyledSearchBarFormSection>
           </StyledSearchBarMain>
         </StyledSearchBarFormContainer>
