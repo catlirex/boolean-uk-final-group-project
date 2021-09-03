@@ -107,6 +107,7 @@ const getScheduledFlightsByFlightNumber = (req, res) => __awaiter(void 0, void 0
                     date: flightNumberQuery,
                     flightNumberId: id,
                 },
+                include: { flightNumber: { include: { airline: true } } },
             });
             res.json({ data: result });
         }

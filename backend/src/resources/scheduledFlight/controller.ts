@@ -110,6 +110,7 @@ export const getScheduledFlightsByFlightNumber = async (
           date: flightNumberQuery,
           flightNumberId: id,
         },
+        include: { flightNumber: { include: { airline: true } } },
       });
       res.json({ data: result });
     } else {
