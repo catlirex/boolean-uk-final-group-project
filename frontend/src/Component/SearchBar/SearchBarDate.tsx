@@ -41,7 +41,6 @@ export default function SearchBarDate() {
           onChange={handleDepartureDateChange}
           KeyboardButtonProps={{
             "aria-label": "change date",
-            // style: { marginLeft: "10px" },
           }}
         />
         <KeyboardDatePicker
