@@ -4,6 +4,7 @@ import { APP_COLOR } from "../../consistent";
 import FlightIcon from "@material-ui/icons/Flight";
 import { TextField } from "@material-ui/core";
 import CompareArrowsIcon from "@material-ui/icons/CompareArrows";
+import SearchBarDate from "./SearchBarDate";
 
 const StyledSearchBarWrapper = styled.section`
   background-color: ${APP_COLOR.lightGrey};
@@ -33,17 +34,23 @@ const StyledSearchBarMain = styled.section`
   }
   .icon {
     transform: rotate(90deg);
+    margin: 10px;
   }
   .flight-icon-p {
+    margin: 10px;
   }
 `;
 
 const StyledSearchBarFormSection = styled.section`
+  margin: 15px;
   .searchBarForm {
     display: grid;
     grid-template-columns: 1fr auto 1fr;
 
     align-items: center;
+  }
+  .form-svg {
+    margin-top: 20px;
   }
 `;
 
@@ -59,10 +66,11 @@ const SearchBarComponent = () => {
             </div>
             <StyledSearchBarFormSection>
               <form className="searchBarForm" action="">
-                <TextField id="standard-basic" label="From" />
-                <CompareArrowsIcon />
-                <TextField id="standard-basic" label="To" />
+                <TextField id="standard-basic" label="From" color="secondary" />
+                <CompareArrowsIcon className="form-svg" />
+                <TextField id="standard-basic" label="To" color="secondary" />
               </form>
+              <SearchBarDate />
             </StyledSearchBarFormSection>
           </StyledSearchBarMain>
         </StyledSearchBarFormContainer>
