@@ -34,14 +34,14 @@ export default function SearchBarDate() {
           variant="inline"
           format="DD/MM/yyyy"
           margin="normal"
-          id="date-picker-inline"
+          id="date-picker-dialog"
           label="Departure Date"
           value={departureDate}
           color="secondary"
           onChange={handleDepartureDateChange}
           KeyboardButtonProps={{
             "aria-label": "change date",
-            style: { marginLeft: "10px" },
+            // style: { marginLeft: "10px" },
           }}
         />
         <KeyboardDatePicker
