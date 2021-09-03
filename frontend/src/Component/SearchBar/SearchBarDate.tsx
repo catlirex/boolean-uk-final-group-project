@@ -45,6 +45,8 @@ export default function SearchBarDate() {
           }}
         />
         <KeyboardDatePicker
+          disableToolbar
+          variant="inline"
           margin="normal"
           id="date-picker-dialog"
           label="Return Date"
