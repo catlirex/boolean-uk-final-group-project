@@ -20,11 +20,7 @@ function App() {
   return (
     <div className="App">
       {loggedInUser ? <LoginHeader /> : <NoLoginHeader />}
-      <Switch>
-        <Route>
-          <h3>Error 404 - mock mock</h3>
-        </Route>
-      </Switch>
+      <Switch></Switch>
       <ModalContainer />
     </div>
   );

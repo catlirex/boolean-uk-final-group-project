@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState, SyntheticEvent } from "react";
 import useStore from "../store";
 import LockOutlinedIcon from "@material-ui/icons/LockOutlined";
 import Typography from "@material-ui/core/Typography";
@@ -46,6 +46,23 @@ function LogInModal() {
   const classes = useStyles();
   const modal = useStore((state) => state.modal);
   const setModal = useStore((store) => store.setModal);
+  const userCredentials = useStore((state) => state.userCredentials);
+  const setUserCredentials = useStore((state) => state.setUserCredentials);
+  const setLoginUser = useStore((state) => state.setLoginUser);
+  const loggedInUser = useStore((state) => state.loggedInUser);
+
+  const handleSubmit = (e: SyntheticEvent) => {
+    e.preventDefault();
+
+    const target = e.target as HTMLFormElement;
+
+    const newCredentials = {
+      email: target.email.value,
+      password: target.password.value,
+    };
+    setLoginUser(newCredentials);
+    setModal("");
+  };
 
   return (
     <Container component="main" maxWidth="xs">
@@ -62,7 +79,7 @@ function LogInModal() {
         <Typography component="h1" variant="h5">
           Sign in
         </Typography>
-        <form className={classes.form}>
+        <form onSubmit={handleSubmit} className={classes.form}>
           <Grid container spacing={2}>
             <Grid item xs={12}>
               <TextField
@@ -99,13 +116,16 @@ function LogInModal() {
             fullWidth
             variant="contained"
             color="secondary"
+            value="Login"
             className={classes.submit}
           >
             Sign In
           </Button>
           <Grid container justifyContent="flex-end">
             <Grid item>
-              <Link href="#">Not our member yet? Sign Up</Link>
+              <Link onClick={() => setModal("signUp")}>
+                Not our member yet? Sign Up
+              </Link>
             </Grid>
           </Grid>
         </form>
@@ -115,24 +135,3 @@ function LogInModal() {
 }
 
 export default LogInModal;
-
-{
-  /* <label htmlFor="email">Email</label>
-<input
-  type="email"
-  placeholder="Enter Email"
-  name="email"
-  required
-></input>
-<label htmlFor="password">Password </label>
-<input
-  type="password"
-  placeholder="Enter Password"
-  name="password"
-  required
-></input>
-
-<button type="submit">Login</button>
-<h3>Not our member yet?</h3>
-<button type="submit">Create an Account</button> */
-}
