@@ -53,7 +53,7 @@ const NavButton = withStyles(() => ({
   },
 }))(Button);
 
-const PinkButton = withStyles(() => ({
+export const PinkButton = withStyles(() => ({
   root: {
     height: "50px",
     WebkitBorderRadius: "10px",

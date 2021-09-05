@@ -6,6 +6,7 @@ import useStore from "./store";
 import LoginHeader from "./Component/LoginHeader";
 import ModalContainer from "./modals/ModalContainer";
 import NoLoginHeader from "./Component/noLoginHeader";
+import FlightStatusPage from "./Page/FlightStatusPage";
 
 function App() {
   const airportList = useStore((state) => state.airportList);
@@ -21,6 +22,9 @@ function App() {
     <div className="App">
       {loggedInUser ? <LoginHeader /> : <NoLoginHeader />}
       <Switch>
+        <Route path="/flightStatus" exact>
+          <FlightStatusPage />
+        </Route>
         <Route>
           <h3>Error 404 - mock mock</h3>
         </Route>
