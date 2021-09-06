@@ -102,9 +102,36 @@ const SearchBarComponent = () => {
   const [arrivalDate, setArrivalDate] = React.useState<
     Date | MaterialUiPickersDate
   >(new Date());
+  const [arrivalInput, setArrivalInput] = React.useState("");
+  const [departureInput, setDepartureInput] = React.useState("");
+
+  const airportList = useStore((state) => state.airportList);
 
   const flightSearch = useStore((state) => state.flightSearch);
   const searchFlightSeach = useStore((state) => state.searchFlightSeach);
+
+  const handleChangeArrival = (e: React.SyntheticEvent) => {
+    const target = e.target as typeof e.target & {
+      value: string;
+    };
+    e.preventDefault();
+    const arrival = target.value.toUpperCase();
+    if (arrival) {
+      setArrivalInput(arrival);
+      console.log("arrival", arrival);
+    }
+  };
+  const handleChangeDeparture = (e: React.SyntheticEvent) => {
+    const target = e.target as typeof e.target & {
+      value: string;
+    };
+    e.preventDefault();
+    const departure = target.value.toUpperCase();
+    if (departure) {
+      setDepartureInput(departure);
+      console.log("departure", departure);
+    }
+  };
 
   const handleSubmit = (e: React.SyntheticEvent) => {
     const target = e.target as typeof e.target & {
@@ -144,6 +171,8 @@ const SearchBarComponent = () => {
                 name="depart"
                 label="From"
                 color="secondary"
+                value={departureInput}
+                onChange={handleChangeDeparture}
               />
               <CompareArrowsIcon className="form-svg" />
               <TextField
@@ -151,6 +180,8 @@ const SearchBarComponent = () => {
                 name="arrival"
                 label="To"
                 color="secondary"
+                value={arrivalInput}
+                onChange={handleChangeArrival}
               />
 
               {/* </form> */}
