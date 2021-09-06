@@ -20,9 +20,11 @@ const loginUser = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
             id: loggedUser.id,
             email: loggedUser.email,
         });
-        res.cookie('token', token, { httpOnly: true });
+        res.cookie("token", token, { httpOnly: true });
         res.json({
             user: {
+                id: loggedUser.id,
+                role: loggedUser.role,
                 username: loggedUser.userName,
                 email: loggedUser.email,
             },
@@ -34,7 +36,7 @@ const loginUser = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
 });
 exports.loginUser = loginUser;
 const logOutUser = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
-    res.clearCookie('token');
+    res.clearCookie("token");
     res.json({ user: null });
 });
 exports.logOutUser = logOutUser;
@@ -46,7 +48,7 @@ const createUser = (req, res) => __awaiter(void 0, void 0, void 0, function* () 
             id: savedUser.id,
             email: savedUser.email,
         });
-        res.cookie('token', token, { httpOnly: true });
+        res.cookie("token", token, { httpOnly: true });
         res.json({
             user: {
                 firstName: savedUser.firstName,
@@ -58,7 +60,7 @@ const createUser = (req, res) => __awaiter(void 0, void 0, void 0, function* () 
     catch (error) {
         console.log(error);
         // if (error.message.includes('Unique constraint failed'))
-        res.status(400).json({ error: 'username/email exists' });
+        res.status(400).json({ error: "username/email exists" });
     }
 });
 exports.createUser = createUser;
