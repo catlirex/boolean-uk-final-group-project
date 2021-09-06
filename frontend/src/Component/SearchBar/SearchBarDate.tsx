@@ -9,16 +9,22 @@ import {
   MuiPickersUtilsProvider,
   KeyboardDatePicker,
 } from "@material-ui/pickers";
+import { ParsableDate } from "@material-ui/pickers/constants/prop-types";
 
-export default function SearchBarDate() {
-  const [departureDate, setDepartureDate] = useState<
-    Date | MaterialUiPickersDate
-  >(new Date());
-  const [arrivalDate, setArrivalDate] = useState<Date | MaterialUiPickersDate>(
-    new Date()
-  );
-
+type SearchBarPorpsType = {
+  setDepartureDate: (date: MaterialUiPickersDate) => void;
+  setArrivalDate: (date: MaterialUiPickersDate) => void;
+  arrivalDate: ParsableDate;
+  departureDate: ParsableDate;
+};
+export default function SearchBarDate({
+  setDepartureDate,
+  setArrivalDate,
+  arrivalDate,
+  departureDate,
+}: SearchBarPorpsType) {
   const handleDepartureDateChange = (date: MaterialUiPickersDate) => {
+    // console.log(setDepartureDate);
     setDepartureDate(date);
   };
 
