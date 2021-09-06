@@ -11,7 +11,6 @@ import ModalContainer from "./modals/ModalContainer";
 import NoLoginHeader from "./Component/noLoginHeader";
 import FlightStatusPage from "./Page/FlightStatusPage";
 
-
 function App() {
   const airportList = useStore((state) => state.airportList);
   const setAirportList = useStore((state) => state.setAirportList);
@@ -24,12 +23,13 @@ function App() {
 
   return (
     <div className="App">
-
-   
       {loggedInUser ? <LoginHeader /> : <NoLoginHeader />}
-         <SearchBarComponent />
 
       <Switch>
+        <Route path="/" exact>
+          <SearchBarComponent />
+        </Route>
+
         <Route path="/flightStatus" exact>
           <FlightStatusPage />
         </Route>
