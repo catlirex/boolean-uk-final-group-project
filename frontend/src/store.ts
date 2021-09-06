@@ -143,7 +143,7 @@ const useStore = create<StoreType>((set, get) => ({
     set({
       loggedInUser: null,
     });
-
+  },
   flightStatus: null,
   searchFlightStatus: async (flightNumber, date) => {
     const flightStatusFromServer = await fetch(
@@ -155,7 +155,6 @@ const useStore = create<StoreType>((set, get) => ({
     if (flightStatusFromServer.data.length)
       set({ flightStatus: flightStatusFromServer.data[0] });
     else set({ flightStatus: undefined });
-
   },
 }));
 
