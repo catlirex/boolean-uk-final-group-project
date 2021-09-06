@@ -1,10 +1,47 @@
 import React from "react";
 import create from "zustand";
 
+type AirportType = {
+  id: string;
+  name: string;
+  city: string;
+};
+
+type AirLineType = {
+  businessLuggage: number;
+  economicLuggage: number;
+  firstClassLuggage: number;
+  id: string;
+  name: string;
+};
+
+type FlightNumberType = {
+  aircraftId: string;
+  airline: AirLineType;
+  airlineId: string;
+  arrivalAirportId: string;
+  departureAirportId: string;
+  durationHour: number;
+  id: string;
+};
+
+type FlightStatusType = {
+  businessPrice: number;
+  date: number;
+  economicPrice: number;
+  firstClassPrice: number;
+  flightNumber: FlightNumberType;
+  flightNumberId: string;
+  gateNumber: string;
+  id: number;
+  status: string;
+  time: string;
+};
+
 type StoreType = {
   modal: string;
   setModal: (modal: string) => void;
-  airportList: [] | null;
+  airportList: AirportType[] | null;
   setAirportList: () => void;
   loggedInUser: null | userCredentials;
   setLoginUser: (loggedInUser: userCredentials) => void;
@@ -15,6 +52,8 @@ type StoreType = {
   setSignupUser: (signedUpUser: signUpUserCredentials) => void;
   signUpUserCredentials: {};
   setSignUpUserCredentials: (signUpUserCredentials: {}) => void;
+  flightStatus: null | undefined | FlightStatusType;
+  searchFlightStatus: (flightNumber: string, date: number) => void;
 };
 
 export type User = {
@@ -45,7 +84,7 @@ const useStore = create<StoreType>((set, get) => ({
     const airportsFromServer = await fetch(
       `http://localhost:3000/airports`
     ).then((res) => res.json());
-    set({ airportList: airportsFromServer });
+    set({ airportList: airportsFromServer.data });
   },
 
   searchResult: null,
@@ -104,6 +143,19 @@ const useStore = create<StoreType>((set, get) => ({
     set({
       loggedInUser: null,
     });
+
+  flightStatus: null,
+  searchFlightStatus: async (flightNumber, date) => {
+    const flightStatusFromServer = await fetch(
+      `http://localhost:3000/scheduledFlight/${flightNumber}?date=${date}`
+    ).then((res) => res.json());
+
+    console.log(flightStatusFromServer);
+
+    if (flightStatusFromServer.data.length)
+      set({ flightStatus: flightStatusFromServer.data[0] });
+    else set({ flightStatus: undefined });
+
   },
 }));
 
