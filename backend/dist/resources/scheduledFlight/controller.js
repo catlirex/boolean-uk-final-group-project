@@ -142,6 +142,10 @@ const getScheduledFlightsByDateDepartureArrival = (req, res) => __awaiter(void 0
             });
             res.json({ data: result });
         }
+        else {
+            const allFlights = yield scheduledFlight.findMany({});
+            res.json({ data: allFlights });
+        }
     }
     catch (error) {
         console.log(error);

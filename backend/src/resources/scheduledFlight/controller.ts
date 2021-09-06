@@ -147,6 +147,9 @@ export const getScheduledFlightsByDateDepartureArrival = async (
         },
       });
       res.json({ data: result });
+    } else {
+      const allFlights = await scheduledFlight.findMany({});
+      res.json({ data: allFlights });
     }
   } catch (error) {
     console.log(error);
