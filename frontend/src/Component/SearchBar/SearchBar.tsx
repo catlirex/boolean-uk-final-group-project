@@ -5,10 +5,14 @@ import FlightIcon from "@material-ui/icons/Flight";
 import { TextField } from "@material-ui/core";
 import CompareArrowsIcon from "@material-ui/icons/CompareArrows";
 import SearchBarDate from "./SearchBarDate";
-import heroImg from "../../assets/fashion-model-beach-hat.jpeg";
 import heroImg3 from "../../assets/pexels-photo-2549084.jpeg";
+import { withStyles } from "@material-ui/core/styles";
+import Button from "@material-ui/core/Button";
+
+import { MaterialUiPickersDate } from "@material-ui/pickers/typings/date";
 
 import SimpleSelect from "./SearchBarTravelSelect";
+import useStore from "../../store";
 
 const StyledSearchBarWrapper = styled.section`
   background-image: url(${heroImg3});
@@ -59,14 +63,14 @@ const StyledSearchBarMain = styled.section`
   }
 `;
 
-const StyledSearchBarFormSection = styled.section`
+const StyledSearchBarFormSection = styled.form`
   margin: 15px;
-  .searchBarForm {
+  /* .searchBarForm {
     display: grid;
     grid-template-columns: 1fr auto 1fr;
 
     align-items: center;
-  }
+  } */
   .form-svg {
     margin-top: 20px;
   }
@@ -76,8 +80,81 @@ const StyledSearchBarFormSection = styled.section`
     justify-content: center;
   }
 `;
+export const PinkButton = withStyles(() => ({
+  root: {
+    height: "50px",
+    WebkitBorderRadius: "10px",
+    margin: "0",
+    marginLeft: "5px",
+    borderRadius: 0,
+    color: APP_COLOR.black,
+    backgroundColor: APP_COLOR.lightPink,
+    "&:hover": {
+      backgroundColor: APP_COLOR.lightGrey,
+    },
+  },
+}))(Button);
 
 const SearchBarComponent = () => {
+  const [departureDate, setDepartureDate] = React.useState<
+    Date | MaterialUiPickersDate
+  >(new Date());
+  const [arrivalDate, setArrivalDate] = React.useState<
+    Date | MaterialUiPickersDate
+  >(new Date());
+  const [arrivalInput, setArrivalInput] = React.useState("");
+  const [departureInput, setDepartureInput] = React.useState("");
+
+  const airportList = useStore((state) => state.airportList);
+
+  const flightSearch = useStore((state) => state.flightSearch);
+  const searchFlightSeach = useStore((state) => state.searchFlightSeach);
+
+  const handleChangeArrival = (e: React.SyntheticEvent) => {
+    const target = e.target as typeof e.target & {
+      value: string;
+    };
+    e.preventDefault();
+    const arrival = target.value.toUpperCase();
+    if (arrival) {
+      setArrivalInput(arrival);
+      console.log("arrival", arrival);
+    }
+  };
+  const handleChangeDeparture = (e: React.SyntheticEvent) => {
+    const target = e.target as typeof e.target & {
+      value: string;
+    };
+    e.preventDefault();
+    const departure = target.value.toUpperCase();
+    if (departure) {
+      setDepartureInput(departure);
+      console.log("departure", departure);
+    }
+  };
+
+  const handleSubmit = (e: React.SyntheticEvent) => {
+    const target = e.target as typeof e.target & {
+      date: { value: number };
+      depart: { value: string };
+      arrival: { value: string };
+    };
+    e.preventDefault();
+
+    const depart = target.depart.value;
+    const arrival = target.arrival.value;
+    const dateString = departureDate
+      ?.toISOString()
+      .split("T")[0]
+      .split("-")
+      .join("");
+    if (dateString) {
+      const dateNum = parseInt(dateString);
+      console.log(dateNum, depart, arrival);
+
+      searchFlightSeach(depart, arrival, dateNum);
+    }
+  };
   return (
     <>
       <StyledSearchBarWrapper>
@@ -87,15 +164,39 @@ const SearchBarComponent = () => {
               <FlightIcon className="icon" />{" "}
               <p className="flight-icon-p">Select your flights</p>
             </div>
-            <StyledSearchBarFormSection>
-              <form className="searchBarForm" action="">
-                <TextField id="standard-basic" label="From" color="secondary" />
-                <CompareArrowsIcon className="form-svg" />
-                <TextField id="standard-basic" label="To" color="secondary" />
-              </form>
-              <SearchBarDate />
+            <StyledSearchBarFormSection onSubmit={handleSubmit}>
+              {/* <form className="searchBarForm" action=""> */}
+              <TextField
+                id="standard-basic"
+                name="depart"
+                label="From"
+                color="secondary"
+                value={departureInput}
+                onChange={handleChangeDeparture}
+              />
+              <CompareArrowsIcon className="form-svg" />
+              <TextField
+                id="standard-basic"
+                name="arrival"
+                label="To"
+                color="secondary"
+                value={arrivalInput}
+                onChange={handleChangeArrival}
+              />
+
+              {/* </form> */}
+              <SearchBarDate
+                departureDate={departureDate}
+                setDepartureDate={setDepartureDate}
+                setArrivalDate={setArrivalDate}
+                arrivalDate={arrivalDate}
+              />
               <div className="travel">
-                <SimpleSelect />
+                {/* <SimpleSelect /> */}
+
+                <PinkButton variant="contained" type="submit">
+                  Search
+                </PinkButton>
               </div>
             </StyledSearchBarFormSection>
           </StyledSearchBarMain>

@@ -37,6 +37,7 @@ type FlightStatusType = {
   status: string;
   time: string;
 };
+
 type TicketType = {
   bookingId: number;
   class: "econ" | "first" | "business";
@@ -70,6 +71,30 @@ export type UserBookingType = {
   BookExtraLuggage: BookExtraLuggageType[];
 };
 
+type FlightSearchTypeOne = {
+  id: number;
+  date: number;
+  time: string;
+  economicPrice: number;
+  businessPrice: number;
+  firstClassPrice: number;
+  gateNumbe: string;
+  flightNumberId: string;
+  flightNumber: FlightNumberType;
+};
+// type FlightSearchTypeTwo = {
+//   id: number;
+//   date: number;
+//   time: string;
+//   economicPrice: number;
+//   businessPrice: number;
+//   firstClassPrice: number;
+//   gateNumbe: string;
+//   flightNumberId: string;
+//   flightNumber: FlightNumberType;
+// };
+
+
 type StoreType = {
   modal: string;
   setModal: (modal: string) => void;
@@ -88,8 +113,14 @@ type StoreType = {
 
   flightStatus: null | undefined | FlightStatusType;
   searchFlightStatus: (flightNumber: string, date: number) => void;
+
   userBooking: null | UserBookingType[];
   getUserBooking: () => void;
+
+  flightSearch: null | undefined | FlightSearchTypeOne | [];
+  flightSearchNoDate: null | undefined | FlightSearchTypeOne | [];
+  searchFlightSeach: (depart: string, arrival: string, date?: number) => void;
+
 };
 
 export type User = {
@@ -192,6 +223,7 @@ const useStore = create<StoreType>((set, get) => ({
     else set({ flightStatus: undefined });
   },
 
+
   userBooking: null,
   getUserBooking: async () => {
     if (!get().loggedInUser) return;
@@ -203,6 +235,36 @@ const useStore = create<StoreType>((set, get) => ({
       if (userBookingFromServer.length)
         set({ userBooking: userBookingFromServer });
       else set({ flightStatus: undefined });
+
+  flightSearch: null,
+  flightSearchNoDate: null,
+  searchFlightSeach: async (depart, arrival, date) => {
+    // if (!date && depart && arrival) {
+    //   const flightSearchFromServer = await fetch(
+    //     `http://localhost:3000/scheduledFlight/?depart=${depart}&arrival=${arrival}`
+    //   ).then((res) => res.json());
+    //   console.log(flightSearchFromServer);
+
+    //   if (flightSearchFromServer.data.length)
+    //     set({ flightSearch: flightSearchFromServer });
+    //   else set({ flightSearch: undefined });
+    // }
+    if (date && depart && arrival) {
+      const flightSearchFromServer = await fetch(
+        `http://localhost:3000/scheduledFlight/?date=${date}&depart=${depart}&arrival=${arrival}`
+      ).then((res) => res.json());
+      console.log(flightSearchFromServer);
+
+      if (flightSearchFromServer.data.length)
+        set({ flightSearch: flightSearchFromServer });
+      else {
+        const flightSearchFromServerWithoutDate = await fetch(
+          `http://localhost:3000/scheduledFlight/?depart=${depart}&arrival=${arrival}`
+        ).then((res) => res.json());
+        console.log(flightSearchFromServerWithoutDate);
+        set({ flightSearchNoDate: flightSearchFromServerWithoutDate });
+      }
+
     }
   },
 }));
