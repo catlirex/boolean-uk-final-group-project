@@ -131,6 +131,22 @@ export const getScheduledFlightsByDateDepartureArrival = async (
   const { date, depart, arrival } = req.query;
 
   try {
+    if (!date && depart && arrival) {
+      const result = await scheduledFlight.findMany({
+        where: {
+          flightNumber: {
+            is: {
+              departureAirportId: depart,
+              arrivalAirportId: arrival,
+            },
+          },
+        },
+        include: {
+          flightNumber: true,
+        },
+      });
+      res.json({ data: result });
+    }
     if (date && depart && arrival) {
       const result = await scheduledFlight.findMany({
         where: {
