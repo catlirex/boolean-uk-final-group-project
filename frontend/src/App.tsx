@@ -4,9 +4,13 @@ import { Switch, Route } from "react-router-dom";
 import "./App.css";
 import useStore from "./store";
 import LoginHeader from "./Component/LoginHeader";
+
+import SearchBarComponent from "./Component/SearchBar/SearchBar";
+
 import ModalContainer from "./modals/ModalContainer";
 import NoLoginHeader from "./Component/noLoginHeader";
 import FlightStatusPage from "./Page/FlightStatusPage";
+
 
 function App() {
   const airportList = useStore((state) => state.airportList);
@@ -20,7 +24,11 @@ function App() {
 
   return (
     <div className="App">
+
+   
       {loggedInUser ? <LoginHeader /> : <NoLoginHeader />}
+         <SearchBarComponent />
+
       <Switch>
         <Route path="/flightStatus" exact>
           <FlightStatusPage />
