@@ -5,6 +5,8 @@ import { APP_COLOR } from "../consistent";
 import { withStyles } from "@material-ui/core/styles";
 import Button from "@material-ui/core/Button";
 import ButtonGroup from "@material-ui/core/ButtonGroup";
+import useStore from "../store";
+import { Link } from "react-router-dom";
 
 const StyledHeader = styled.header`
   background-color: ${APP_COLOR.pink};
@@ -69,6 +71,7 @@ export const PinkButton = withStyles(() => ({
 }))(Button);
 
 export default function LoginHeader() {
+  const logOut = useStore((state) => state.logOut);
   return (
     <StyledHeader>
       <img className="app-logo" src={logo}></img>
@@ -87,7 +90,12 @@ export default function LoginHeader() {
       </nav>
       <div>
         <PinkButton variant="contained">My Flight</PinkButton>
-        <PinkButton variant="contained">LogOut</PinkButton>
+
+        <Link to="/">
+          <PinkButton onClick={logOut} variant="contained">
+            LogOut
+          </PinkButton>
+        </Link>
       </div>
     </StyledHeader>
   );
