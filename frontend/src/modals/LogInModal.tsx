@@ -1,4 +1,4 @@
-import React, { useState, SyntheticEvent } from "react";
+import React, { useState, SyntheticEvent, useEffect } from "react";
 import useStore from "../store";
 import LockOutlinedIcon from "@material-ui/icons/LockOutlined";
 import Typography from "@material-ui/core/Typography";
@@ -61,8 +61,11 @@ function LogInModal() {
       password: target.password.value,
     };
     setLoginUser(newCredentials);
-    setModal("");
   };
+
+  useEffect(() => {
+    if (loggedInUser) setModal("");
+  }, [loggedInUser]);
 
   return (
     <Container component="main" maxWidth="xs">

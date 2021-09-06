@@ -1,4 +1,4 @@
-import React, { SyntheticEvent } from "react";
+import React, { SyntheticEvent, useEffect } from "react";
 import useStore from "../store";
 import LockOutlinedIcon from "@material-ui/icons/LockOutlined";
 import Typography from "@material-ui/core/Typography";
@@ -46,6 +46,7 @@ function SignUpModal() {
   const classes = useStyles();
   const modal = useStore((state) => state.modal);
   const setModal = useStore((state) => state.setModal);
+  const loggedInUser = useStore((state) => state.loggedInUser);
   const setSignupUser = useStore((state) => state.setSignupUser);
 
   const handleSubmit = (e: SyntheticEvent) => {
@@ -60,8 +61,11 @@ function SignUpModal() {
       password: target.password.value,
     };
     setSignupUser(newUser);
-    setModal("");
   };
+
+  useEffect(() => {
+    if (loggedInUser) setModal("");
+  }, [loggedInUser]);
 
   return (
     <Container component="main" maxWidth="xs">
