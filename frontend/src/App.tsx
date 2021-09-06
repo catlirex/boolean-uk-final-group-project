@@ -24,7 +24,6 @@ function App() {
   return (
     <div className="App">
       {loggedInUser ? <LoginHeader /> : <NoLoginHeader />}
-
       <Switch>
         <Route path="/" exact>
           <SearchBarComponent />

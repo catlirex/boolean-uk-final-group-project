@@ -5,6 +5,7 @@ import { APP_COLOR } from "../consistent";
 import { withStyles } from "@material-ui/core/styles";
 import Button from "@material-ui/core/Button";
 import ButtonGroup from "@material-ui/core/ButtonGroup";
+import useStore from "../store";
 
 const StyledHeader = styled.header`
   background-color: ${APP_COLOR.pink};
@@ -68,6 +69,8 @@ const PinkButton = withStyles(() => ({
 }))(Button);
 
 export default function NoLoginHeader() {
+  const setModal = useStore((state) => state.setModal);
+
   return (
     <StyledHeader>
       <img className="app-logo" src={logo}></img>
@@ -85,8 +88,12 @@ export default function NoLoginHeader() {
         </ul>
       </nav>
       <div>
-        <PinkButton variant="contained">Login</PinkButton>
-        <PinkButton variant="contained">SignUp</PinkButton>
+        <PinkButton onClick={() => setModal("logIn")} variant="contained">
+          Login
+        </PinkButton>
+        <PinkButton onClick={() => setModal("signUp")} variant="contained">
+          SignUp
+        </PinkButton>
       </div>
     </StyledHeader>
   );

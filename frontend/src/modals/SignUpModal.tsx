@@ -46,39 +46,22 @@ function SignUpModal() {
   const classes = useStyles();
   const modal = useStore((state) => state.modal);
   const setModal = useStore((state) => state.setModal);
+  const setSignupUser = useStore((state) => state.setSignupUser);
 
-  function handleSubmit(event: SyntheticEvent) {
-    event.preventDefault();
+  const handleSubmit = (e: SyntheticEvent) => {
+    e.preventDefault();
 
-    const target = event.target as HTMLFormElement;
+    const target = e.target as HTMLFormElement;
 
-    let newUser: {
-      firstName: string;
-      lastName: string;
-      password: string;
-      email: string;
-    } = {
+    const newUser = {
       firstName: target.firstName.value,
       lastName: target.lastName.value,
-      password: target.password.value,
       email: target.email.value,
+      password: target.password.value,
     };
-
-    fetch(`http://localhost:3000/signup`, {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify(newUser),
-    }).then((response) => {
-      if (response.ok) {
-        return response.json();
-      } else {
-        throw Error("Failed");
-      }
-    });
+    setSignupUser(newUser);
     setModal("");
-  }
+  };
 
   return (
     <Container component="main" maxWidth="xs">
@@ -95,7 +78,7 @@ function SignUpModal() {
         <Typography component="h1" variant="h5">
           Create New Account
         </Typography>
-        <form className={classes.form}>
+        <form onSubmit={handleSubmit} className={classes.form}>
           <Grid container spacing={2}>
             <Grid item xs={12} sm={6}>
               <TextField
@@ -161,7 +144,9 @@ function SignUpModal() {
           </Button>
           <Grid container justifyContent="flex-end">
             <Grid item>
-              <Link href="#">Already have an account? Sign in</Link>
+              <Link onClick={() => setModal("logIn")}>
+                Already have an account? Sign in
+              </Link>
             </Grid>
           </Grid>
         </form>
@@ -172,97 +157,35 @@ function SignUpModal() {
 
 export default SignUpModal;
 
-{
-  /* <Grid container spacing={2}>
-            <Grid item xs={12} sm={6}>
-              <TextField
-                autoComplete="fname"
-                name="firstName"
-                variant="outlined"
-                required
-                fullWidth
-                id="firstName"
-                label="First Name"
-                autoFocus
-              />
-            </Grid>
-            <Grid item xs={12} sm={6}>
-              <TextField
-                variant="outlined"
-                required
-                fullWidth
-                id="lastName"
-                label="Last Name"
-                name="lastName"
-                autoComplete="lname"
-              />
-            </Grid>
-            <Grid item xs={12}>
-              <TextField
-                variant="outlined"
-                required
-                fullWidth
-                id="email"
-                label="Email Address"
-                name="email"
-                autoComplete="email"
-              />
-            </Grid>
-            <Grid item xs={12}>
-              <TextField
-                variant="outlined"
-                required
-                fullWidth
-                name="password"
-                label="Password"
-                type="password"
-                id="password"
-                autoComplete="current-password"
-              />
-            </Grid>
-            <Grid item xs={12}>
-              <FormControlLabel
-                control={<Checkbox value="allowExtraEmails" color="primary" />}
-                label="I want to receive inspiration, marketing promotions and updates via email."
-              />
-            </Grid>
-          </Grid> */
-}
+//   function handleSubmit(event: SyntheticEvent) {
+//     event.preventDefault();
 
-//   <form className={classes.form} onSubmit={handleSubmit}>
-//   <label htmlFor="email">Email </label>
-//   <input
-//     type="email"
-//     placeholder="Enter Email"
-//     name="name"
-//     required
-//   ></input>
+//     const target = event.target as HTMLFormElement;
 
-//   <label htmlFor="password">Password </label>
-//   <input
-//     type="password"
-//     placeholder="Enter Password"
-//     name="password"
-//     required
-//   ></input>
+//     let newUser: {
+//       firstName: string;
+//       lastName: string;
+//       password: string;
+//       email: string;
+//     } = {
+//       firstName: target.firstName.value,
+//       lastName: target.lastName.value,
+//       password: target.password.value,
+//       email: target.email.value,
+//     };
 
-//   <label htmlFor="firstName">First Name </label>
-//   <input
-//     type="name"
-//     placeholder="Enter First Name"
-//     name="firstName"
-//     required
-//   ></input>
-
-//   <label htmlFor="lastName">Last Name</label>
-//   <input
-//     type="name"
-//     placeholder="Enter Last Name"
-//     name="lastName"
-//     required
-//   ></input>
-
-//   <button type="submit">Create Account</button>
-//   <h3>Already have an account?</h3>
-//   <button type="submit">Login</button>
-// </form>
+//     fetch(`http://localhost:3000/signup`, {
+//       method: "POST",
+//       headers: {
+//         "Content-Type": "application/json",
+//       },
+//       body: JSON.stringify(newUser),
+//     }).then((response) => {
+//       if (response.ok) {
+//         return response.json();
+//       } else {
+//         throw Error("Failed");
+//       }
+//     });
+//     setModal("");
+//   }

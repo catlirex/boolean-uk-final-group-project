@@ -1,11 +1,9 @@
-import { Box, Grid, makeStyles } from "@material-ui/core";
 import React from "react";
-import { APP_COLOR } from "../consistent";
 import styled from "styled-components";
 import useStore from "../store";
 import LogInModal from "./LogInModal";
 import SignUpModal from "./SignUpModal";
-
+import LoginErrorModal from "./LoginErrorModal";
 // const useStyles = makeStyles((theme) => ({
 //   modal: {
 //     border: theme(2),
@@ -46,6 +44,7 @@ function ModalContainer() {
       <div className="modal">
         {modal === "logIn" ? <LogInModal /> : null}
         {modal === "signUp" ? <SignUpModal /> : null}
+        {modal === "loginError" ? <LoginErrorModal /> : null}
       </div>
     </StyledContainer>
   );
