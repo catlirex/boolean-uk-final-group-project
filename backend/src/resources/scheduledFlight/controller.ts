@@ -142,12 +142,11 @@ export const getScheduledFlightsByDateDepartureArrival = async (
           },
         },
         include: {
-          flightNumber: true,
+          flightNumber: { include: { airline: true } },
         },
       });
       res.json({ data: result });
-    }
-    if (date && depart && arrival) {
+    } else if (date && depart && arrival) {
       const result = await scheduledFlight.findMany({
         where: {
           date: Number(date),

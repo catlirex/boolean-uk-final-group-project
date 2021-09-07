@@ -1,10 +1,11 @@
 import React from "react";
 import create from "zustand";
 
-type AirportType = {
+export type AirportType = {
   id: string;
   name: string;
   city: string;
+  cityImage: string;
 };
 
 type AirLineType = {
@@ -71,7 +72,7 @@ export type UserBookingType = {
   BookExtraLuggage: BookExtraLuggageType[];
 };
 
-type FlightSearchTypeOne = {
+export type FlightSearchTypeOne = {
   id: number;
   date: number;
   time: string;
@@ -116,8 +117,9 @@ type StoreType = {
   userBooking: null | UserBookingType[];
   getUserBooking: () => void;
 
-  flightSearch: null | undefined | FlightSearchTypeOne | [];
-  flightSearchNoDate: null | undefined | FlightSearchTypeOne | [];
+  flightSearch: null | undefined | FlightSearchTypeOne[];
+  flightSearchNoDate: null | undefined | FlightSearchTypeOne[];
+  resetSearch: () => void;
   searchFlightSeach: (depart: string, arrival: string, date?: number) => void;
 };
 
@@ -236,6 +238,9 @@ const useStore = create<StoreType>((set, get) => ({
   },
   flightSearch: null,
   flightSearchNoDate: null,
+  resetSearch: () => {
+    set({ flightSearch: null, flightSearchNoDate: null });
+  },
   searchFlightSeach: async (depart, arrival, date) => {
     if (date && depart && arrival) {
       const flightSearchFromServer = await fetch(
@@ -244,13 +249,15 @@ const useStore = create<StoreType>((set, get) => ({
       console.log(flightSearchFromServer);
 
       if (flightSearchFromServer.data.length)
-        set({ flightSearch: flightSearchFromServer });
+        set({ flightSearch: flightSearchFromServer.data });
       else {
         const flightSearchFromServerWithoutDate = await fetch(
           `http://localhost:3000/scheduledFlight/?depart=${depart}&arrival=${arrival}`
         ).then((res) => res.json());
         console.log(flightSearchFromServerWithoutDate);
-        set({ flightSearchNoDate: flightSearchFromServerWithoutDate });
+        if (flightSearchFromServerWithoutDate.data.length)
+          set({ flightSearchNoDate: flightSearchFromServerWithoutDate.data });
+        else set({ flightSearchNoDate: undefined });
       }
     }
   },
