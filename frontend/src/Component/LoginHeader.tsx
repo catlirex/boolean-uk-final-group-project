@@ -59,7 +59,7 @@ export const PinkButton = withStyles(() => ({
   root: {
     height: "50px",
     WebkitBorderRadius: "10px",
-    margin: "0",
+    margin: "5px",
     marginLeft: "5px",
     borderRadius: 0,
     color: APP_COLOR.black,
