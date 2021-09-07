@@ -40,17 +40,17 @@ type FlightStatusType = {
 };
 
 type TicketType = {
-  bookingId: number;
+  bookingId?: number;
   class: "econ" | "first" | "business";
-  id: number;
-  passengerFirstName: null | string;
-  passengerLastName: null | string;
-  passpostNumber: null | string;
-  scheduledFlight: FlightStatusType;
+  id?: number;
+  passengerFirstName?: null | string;
+  passengerLastName?: null | string;
+  passpostNumber?: null | string;
+  scheduledFlight?: FlightStatusType;
   scheduledFlightId: number;
-  seatNumer: null | string;
-  specialMeal: null | string;
-  status: string;
+  seatNumer?: null | string;
+  specialMeal?: null | string;
+  status?: string;
 };
 
 type BookExtraLuggageType = {
@@ -95,6 +95,16 @@ export type FlightSearchTypeOne = {
 //   flightNumber: FlightNumberType;
 // };
 
+type newBookingType = {
+  userId?: number;
+  bookExtraLuggage?: {
+    id: number;
+    price: number;
+    weight: number;
+  }[];
+  tickets: TicketType[];
+};
+
 type StoreType = {
   modal: string;
   setModal: (modal: string) => void;
@@ -121,6 +131,9 @@ type StoreType = {
   flightSearchNoDate: null | undefined | FlightSearchTypeOne[];
   resetSearch: () => void;
   searchFlightSeach: (depart: string, arrival: string, date?: number) => void;
+  outboundBooking: null | newBookingType;
+  inboundBooking: null | newBookingType;
+  selectOutboundFlight: (arg: TicketType) => void;
 };
 
 export type User = {
@@ -239,7 +252,11 @@ const useStore = create<StoreType>((set, get) => ({
   flightSearch: null,
   flightSearchNoDate: null,
   resetSearch: () => {
-    set({ flightSearch: null, flightSearchNoDate: null });
+    set({
+      flightSearch: null,
+      flightSearchNoDate: null,
+      outboundBooking: null,
+    });
   },
   searchFlightSeach: async (depart, arrival, date) => {
     if (date && depart && arrival) {
@@ -261,6 +278,12 @@ const useStore = create<StoreType>((set, get) => ({
       }
     }
   },
+
+  outboundBooking: null,
+  selectOutboundFlight: (ticket) => {
+    set({ outboundBooking: { tickets: [ticket] } });
+  },
+  inboundBooking: null,
 }));
 
 export default useStore;

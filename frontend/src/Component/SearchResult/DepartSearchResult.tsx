@@ -30,6 +30,7 @@ export default function DepartSearchResult() {
   const [departAirport, setDepartAirport] = useState<
     AirportType | undefined | null
   >(null);
+
   useEffect(() => {
     if (flightSearch?.length) {
       const foundAirport = airportList?.find(
@@ -67,10 +68,14 @@ export default function DepartSearchResult() {
   if (flightSearch && departAirport)
     return (
       <StyledSection>
-        <p>do this later</p>
         <div className="img-container">
           <img className="city-image" src={departAirport.cityImage} />
         </div>
+        <ul className="result-list">
+          {flightSearch.map((target, index) => (
+            <ResultCard key={index} data={target} />
+          ))}
+        </ul>
       </StyledSection>
     );
   else return null;
