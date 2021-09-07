@@ -125,7 +125,23 @@ exports.getScheduledFlightsByFlightNumber = getScheduledFlightsByFlightNumber;
 const getScheduledFlightsByDateDepartureArrival = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     const { date, depart, arrival } = req.query;
     try {
-        if (date && depart && arrival) {
+        if (!date && depart && arrival) {
+            const result = yield scheduledFlight.findMany({
+                where: {
+                    flightNumber: {
+                        is: {
+                            departureAirportId: depart,
+                            arrivalAirportId: arrival,
+                        },
+                    },
+                },
+                include: {
+                    flightNumber: { include: { airline: true } },
+                },
+            });
+            res.json({ data: result });
+        }
+        else if (date && depart && arrival) {
             const result = yield scheduledFlight.findMany({
                 where: {
                     date: Number(date),
@@ -141,6 +157,10 @@ const getScheduledFlightsByDateDepartureArrival = (req, res) => __awaiter(void 0
                 },
             });
             res.json({ data: result });
+        }
+        else {
+            const allFlights = yield scheduledFlight.findMany({});
+            res.json({ data: allFlights });
         }
     }
     catch (error) {
