@@ -154,7 +154,8 @@ const SearchBarComponent = () => {
   // }, [departureInput]);
 
   // Option two instead of useEffect
-  const airportSearch = () => {
+
+  const airportSearchDeparture = () => {
     return airportList?.filter((airport) => {
       if (
         airport.name.toLowerCase().includes(departureInput.toLowerCase()) ||
@@ -166,8 +167,8 @@ const SearchBarComponent = () => {
     });
   };
 
-  const code2 = airportSearch();
-  if (code2) console.log(code2[0].id);
+  const filteredDepature = airportSearchDeparture();
+  if (filteredDepature) console.log(filteredDepature[0].id);
 
   // form submittion
   const handleSubmit = (e: React.SyntheticEvent) => {
@@ -212,7 +213,7 @@ const SearchBarComponent = () => {
                 onChange={handleChangeDeparture}
               />
               {departureInput
-                ? code2?.map((airport) => (
+                ? filteredDepature?.map((airport) => (
                     <p onClick={() => setDepartureInput(airport.id)}>
                       {airport.name}
                     </p>
