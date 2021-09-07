@@ -5,6 +5,7 @@ export type AirportType = {
   id: string;
   name: string;
   city: string;
+  country: string;
   cityImage: string;
 };
 
@@ -16,7 +17,7 @@ type AirLineType = {
   name: string;
 };
 
-type FlightNumberType = {
+export type FlightNumberType = {
   aircraftId: string;
   airline: AirLineType;
   airlineId: string;
@@ -26,7 +27,7 @@ type FlightNumberType = {
   id: string;
 };
 
-type FlightStatusType = {
+export type FlightStatusType = {
   businessPrice: number;
   date: number;
   economicPrice: number;
@@ -38,6 +39,7 @@ type FlightStatusType = {
   status: string;
   time: string;
 };
+
 
 type TicketType = {
   bookingId?: number;
@@ -103,6 +105,7 @@ type newBookingType = {
     weight: number;
   }[];
   tickets: TicketType[];
+
 };
 
 type StoreType = {
@@ -124,6 +127,13 @@ type StoreType = {
   flightStatus: null | undefined | FlightStatusType;
   searchFlightStatus: (flightNumber: string, date: number) => void;
 
+  
+  departureFlightList: ScheduledFlightList[];
+  setDepartureFlightList: (airportCode: string) => void;
+  selectedAirport: AirportType | null;
+  setSelectedAirport: (id: string) => void;
+
+
   userBooking: null | UserBookingType[];
   getUserBooking: () => void;
 
@@ -134,6 +144,7 @@ type StoreType = {
   outboundBooking: null | newBookingType;
   inboundBooking: null | newBookingType;
   selectOutboundFlight: (arg: TicketType) => void;
+
 };
 
 export type User = {
@@ -145,9 +156,11 @@ export type User = {
 };
 
 export type userCredentials = {
+  id?: number;
   email: string;
   password: string;
-  id?: number;
+  role?: string;
+
 };
 
 export type signUpUserCredentials = {
@@ -172,6 +185,8 @@ const useStore = create<StoreType>((set, get) => ({
   setSearchResult: () => {},
 
   // LOGIN STUFF
+  role: "",
+  setRole: (role) => set({ role }),
   userCredentials: {
     email: null,
     password: null,
@@ -191,7 +206,7 @@ const useStore = create<StoreType>((set, get) => ({
       }
     });
     if (loginUser) {
-      set({ loggedInUser: loginUser });
+      set({ loggedInUser: loginUser.user });
     } else {
       set({ modal: "loginError" });
     }
@@ -219,7 +234,6 @@ const useStore = create<StoreType>((set, get) => ({
     });
     if (signupUser) set({ loggedInUser: signupUser });
   },
-
   logOut: () => {
     set({
       loggedInUser: null,
@@ -235,6 +249,22 @@ const useStore = create<StoreType>((set, get) => ({
       set({ flightStatus: flightStatusFromServer.data[0] });
     else set({ flightStatus: undefined });
   },
+
+  selectedAirport: null,
+  setSelectedAirport: async (id) => {
+    const currentAirport = await fetch(
+      `http://localhost:3000/scheduledFlight/departure/${id}`
+    ).then((res) => res.json());
+    set({ selectedAirport: currentAirport });
+  },
+  departureFlightList: [],
+  setDepartureFlightList: async (airportCode) => {
+    const scheduledFlightByDeparture = await fetch(
+      `http://localhost:3000/scheduledFlight/departure/${airportCode}`
+    ).then((res) => res.json());
+    set({ departureFlightList: scheduledFlightByDeparture });
+  },
+
 
   userBooking: null,
   getUserBooking: async () => {
@@ -284,6 +314,7 @@ const useStore = create<StoreType>((set, get) => ({
     set({ outboundBooking: { tickets: [ticket] } });
   },
   inboundBooking: null,
+
 }));
 
 export default useStore;

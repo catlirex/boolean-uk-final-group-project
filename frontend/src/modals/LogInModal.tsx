@@ -12,6 +12,8 @@ import FormControlLabel from "@material-ui/core/FormControlLabel";
 import Checkbox from "@material-ui/core/Checkbox";
 import Link from "@material-ui/core/Link";
 import Grid from "@material-ui/core/Grid";
+import { useHistory } from "react-router";
+import StaffHomePage from "../Page/StaffHomePage";
 
 const useStyles = makeStyles((theme) => ({
   main: {
@@ -50,6 +52,11 @@ function LogInModal() {
   const setUserCredentials = useStore((state) => state.setUserCredentials);
   const setLoginUser = useStore((state) => state.setLoginUser);
   const loggedInUser = useStore((state) => state.loggedInUser);
+  const role = useStore((state) => state.role);
+  const setRole = useStore((state) => state.setRole);
+
+  // 1) Check role when user login, if staff redirect to staff page
+  // 2) staff homepage: staff header + staff left nav bar
 
   const handleSubmit = (e: SyntheticEvent) => {
     e.preventDefault();
@@ -63,8 +70,17 @@ function LogInModal() {
     setLoginUser(newCredentials);
   };
 
+  const history = useHistory();
+
   useEffect(() => {
-    if (loggedInUser) setModal("");
+    console.log(loggedInUser);
+    if (loggedInUser?.role === "USER") {
+      setModal("");
+    }
+    if (loggedInUser?.role === "STAFF") {
+      history.push("/staffpage");
+      setModal("");
+    }
   }, [loggedInUser]);
 
   return (

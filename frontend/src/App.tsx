@@ -8,9 +8,13 @@ import SearchBarComponent from "./Component/SearchBar/SearchBar";
 import ModalContainer from "./modals/ModalContainer";
 import NoLoginHeader from "./Component/noLoginHeader";
 import FlightStatusPage from "./Page/FlightStatusPage";
+
+import StaffHomePage from "./Page/StaffHomePage";
+
 import MyBookingPage from "./Page/MyBookingPage";
 import SearchResultPage from "./Page/SearchResultPage";
 import BookingFormPage from "./Page/BookingFormPage";
+
 
 function App() {
   const airportList = useStore((state) => state.airportList);
@@ -20,16 +24,17 @@ function App() {
   useEffect(() => {
     setAirportList();
   }, []);
-  console.log(airportList);
 
   return (
     <div className="App">
-      {loggedInUser ? <LoginHeader /> : <NoLoginHeader />}
       <Switch>
+        <Route path="/staffpage" exact>
+          <StaffHomePage />
+        </Route>
+        {loggedInUser ? <LoginHeader /> : <NoLoginHeader />}
         <Route path="/" exact>
           <SearchBarComponent />
         </Route>
-
         <Route path="/flightStatus" exact>
           <FlightStatusPage />
         </Route>
