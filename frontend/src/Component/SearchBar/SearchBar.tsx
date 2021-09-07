@@ -196,6 +196,7 @@ const SearchBarComponent = () => {
       date: { value: number };
       depart: { value: string };
       arrival: { value: string };
+      reset: () => void;
     };
     e.preventDefault();
 
@@ -211,9 +212,10 @@ const SearchBarComponent = () => {
       console.log(dateNum, depart, arrival);
 
       searchFlightSeach(depart, arrival, dateNum);
-      setArrivalInput("");
-      setDepartureInput("");
     }
+    target.reset();
+    setDepartureInput("");
+    setArrivalInput("");
   };
   return (
     <>
