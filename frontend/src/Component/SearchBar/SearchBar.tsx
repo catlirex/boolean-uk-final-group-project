@@ -125,7 +125,6 @@ const SearchBarComponent = () => {
     const arrival = target.value;
 
     setArrivalInput(arrival);
-    console.log("arrival", arrival);
   };
   const handleChangeDeparture = (e: React.SyntheticEvent) => {
     const target = e.target as typeof e.target & {
@@ -135,19 +134,41 @@ const SearchBarComponent = () => {
     const departure = target.value;
 
     setDepartureInput(departure);
-    console.log("departure", departure);
   };
 
   // useEffect for search filter
-  useEffect(() => {
-    if (airportList) {
-      const filterdAirports =
-        airportList.filter(
-          (airport) => airport.name && airport.city === departureInput
-        ).length > 0;
-      console.log(filterdAirports);
-    }
-  }, [departureInput]);
+  // useEffect(() => {
+  //   if (airportList) {
+  //     // const filterdAirports =
+  //     //   airportList.filter(
+  //     //     (airport) => airport.name && airport.city === departureInput
+  //     //   ).length > 0;
+  //     let filterdAirports: any = null;
+  //     airportList.filter((airport) => {
+  //       if (airport.name && airport.city === departureInput) {
+  //         return (filterdAirports = airport.id);
+  //       }
+  //       console.log("Departure", departureInput, filterdAirports);
+  //     });
+  //   }
+  // }, [departureInput]);
+
+  // Option two instead of useEffect
+  const airportSearch = () => {
+    return airportList?.filter((airport) => {
+      if (
+        airport.name.toLowerCase().includes(departureInput.toLowerCase()) ||
+        airport.city.toLowerCase().includes(departureInput.toLowerCase()) ||
+        airport.id.toLowerCase().includes(departureInput.toLowerCase())
+      ) {
+        return airport;
+      }
+    });
+  };
+
+  const code2 = airportSearch();
+  if (code2) console.log(code2[0].id);
+
   // form submittion
   const handleSubmit = (e: React.SyntheticEvent) => {
     const target = e.target as typeof e.target & {
@@ -190,6 +211,13 @@ const SearchBarComponent = () => {
                 value={departureInput}
                 onChange={handleChangeDeparture}
               />
+              {departureInput
+                ? code2?.map((airport) => (
+                    <p onClick={() => setDepartureInput(airport.id)}>
+                      {airport.name}
+                    </p>
+                  ))
+                : ""}
               <CompareArrowsIcon className="form-svg" />
               <TextField
                 id="standard-basic"
