@@ -94,7 +94,6 @@ type FlightSearchTypeOne = {
 //   flightNumber: FlightNumberType;
 // };
 
-
 type StoreType = {
   modal: string;
   setModal: (modal: string) => void;
@@ -120,7 +119,6 @@ type StoreType = {
   flightSearch: null | undefined | FlightSearchTypeOne | [];
   flightSearchNoDate: null | undefined | FlightSearchTypeOne | [];
   searchFlightSeach: (depart: string, arrival: string, date?: number) => void;
-
 };
 
 export type User = {
@@ -134,7 +132,7 @@ export type User = {
 export type userCredentials = {
   email: string;
   password: string;
-  id?: number
+  id?: number;
 };
 
 export type signUpUserCredentials = {
@@ -223,7 +221,6 @@ const useStore = create<StoreType>((set, get) => ({
     else set({ flightStatus: undefined });
   },
 
-
   userBooking: null,
   getUserBooking: async () => {
     if (!get().loggedInUser) return;
@@ -235,20 +232,11 @@ const useStore = create<StoreType>((set, get) => ({
       if (userBookingFromServer.length)
         set({ userBooking: userBookingFromServer });
       else set({ flightStatus: undefined });
-
+    }
+  },
   flightSearch: null,
   flightSearchNoDate: null,
   searchFlightSeach: async (depart, arrival, date) => {
-    // if (!date && depart && arrival) {
-    //   const flightSearchFromServer = await fetch(
-    //     `http://localhost:3000/scheduledFlight/?depart=${depart}&arrival=${arrival}`
-    //   ).then((res) => res.json());
-    //   console.log(flightSearchFromServer);
-
-    //   if (flightSearchFromServer.data.length)
-    //     set({ flightSearch: flightSearchFromServer });
-    //   else set({ flightSearch: undefined });
-    // }
     if (date && depart && arrival) {
       const flightSearchFromServer = await fetch(
         `http://localhost:3000/scheduledFlight/?date=${date}&depart=${depart}&arrival=${arrival}`
@@ -264,7 +252,6 @@ const useStore = create<StoreType>((set, get) => ({
         console.log(flightSearchFromServerWithoutDate);
         set({ flightSearchNoDate: flightSearchFromServerWithoutDate });
       }
-
     }
   },
 }));
