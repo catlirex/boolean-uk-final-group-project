@@ -1,4 +1,4 @@
-import React, { useEffect } from "react";
+import React, { useState } from "react";
 import styled from "styled-components";
 import { APP_COLOR } from "../../consistent";
 import FlightIcon from "@material-ui/icons/Flight";
@@ -105,6 +105,9 @@ const SearchBarComponent = () => {
   const [arrivalInput, setArrivalInput] = React.useState("");
   const [departureInput, setDepartureInput] = React.useState("");
 
+  const [showParaDepature, setshowParaDepature] = useState<boolean>(false);
+  const [showParaArrival, setshowParaArrival] = useState<boolean>(false);
+
   const airportList = useStore((state) => state.airportList);
 
   const flightSearch = useStore((state) => state.flightSearch);
@@ -131,35 +134,47 @@ const SearchBarComponent = () => {
   };
 
   // departure filter
-  // const airportSearchDeparture = () => {
-  //   return airportList?.filter((airport) => {
-  //     if (
-  //       airport.name.toLowerCase().includes(departureInput.toLowerCase()) ||
-  //       airport.city.toLowerCase().includes(departureInput.toLowerCase()) ||
-  //       airport.id.toLowerCase().includes(departureInput.toLowerCase())
-  //     ) {
-  //       return airport;
-  //     }
-  //   });
-  // };
-
-  // // arrival filter
-  const airportSearch = (string: string) => {
+  const airportSearchDeparture = () => {
     return airportList?.filter((airport) => {
       if (
-        airport.name.toLowerCase().includes(string.toLowerCase()) ||
-        airport.city.toLowerCase().includes(string.toLowerCase()) ||
-        airport.id.toLowerCase().includes(string.toLowerCase())
+        airport.name.toLowerCase().includes(departureInput.toLowerCase()) ||
+        airport.city.toLowerCase().includes(departureInput.toLowerCase()) ||
+        airport.id.toLowerCase().includes(departureInput.toLowerCase())
       ) {
         return airport;
       }
     });
   };
-  const filteredDepature = airportSearch(departureInput);
-  if (filteredDepature) console.log(filteredDepature[0].id);
 
-  const filteredArrival = airportSearch(arrivalInput);
-  if (filteredArrival) console.log(filteredArrival[0].id);
+  // // arrival filter
+  const airportSearch = () => {
+    return airportList?.filter((airport) => {
+      if (
+        airport.name.toLowerCase().includes(arrivalInput.toLowerCase()) ||
+        airport.city.toLowerCase().includes(arrivalInput.toLowerCase()) ||
+        airport.id.toLowerCase().includes(arrivalInput.toLowerCase())
+      ) {
+        return airport;
+      }
+    });
+  };
+  const filteredDepature = airportSearchDeparture();
+
+  const filteredArrival = airportSearch();
+
+  // handle para click departure
+  const handleParaClickDeparture = (airport: any) => {
+    if (!airport) return;
+    if (airport.id) setDepartureInput(airport.id);
+    setshowParaDepature(!showParaDepature);
+  };
+
+  // handle para click arrival
+  const handleParaClickArrival = (airport: any) => {
+    if (!airport) return;
+    if (airport.id) setDepartureInput(airport.id);
+    setshowParaArrival(!showParaArrival);
+  };
   // form submittion
   const handleSubmit = (e: React.SyntheticEvent) => {
     const target = e.target as typeof e.target & {
@@ -200,12 +215,13 @@ const SearchBarComponent = () => {
                 label="From"
                 color="secondary"
                 value={departureInput}
+                autoComplete="off"
                 onChange={handleChangeDeparture}
               />
               {departureInput
                 ? filteredDepature?.map((airport) => (
-                    <p onClick={() => setDepartureInput(airport.id)}>
-                      {airport.name}
+                    <p onClick={() => handleParaClickDeparture(airport)}>
+                      {!showParaDepature ? airport.name : ""}
                     </p>
                   ))
                 : ""}
@@ -220,8 +236,8 @@ const SearchBarComponent = () => {
               />
               {arrivalInput
                 ? filteredArrival?.map((airport) => (
-                    <p onClick={() => setArrivalInput(airport.id)}>
-                      {airport.name}
+                    <p onClick={() => handleParaClickArrival(airport)}>
+                      {!showParaArrival ? airport.name : ""}
                     </p>
                   ))
                 : ""}
