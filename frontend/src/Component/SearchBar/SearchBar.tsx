@@ -71,6 +71,21 @@ const StyledSearchBarFormSection = styled.form`
 
     align-items: center;
   } */
+
+  .depatureEl {
+    display: inline-block;
+  }
+
+  .ul-depart {
+    display: inline-block;
+
+    min-width: 190px;
+  }
+
+  .ul-arrive {
+    display: inline-block;
+  }
+  display: inline-block;
   .form-svg {
     margin-top: 20px;
   }
@@ -172,7 +187,7 @@ const SearchBarComponent = () => {
   // handle para click arrival
   const handleParaClickArrival = (airport: any) => {
     if (!airport) return;
-    if (airport.id) setDepartureInput(airport.id);
+    if (airport.id) setArrivalInput(airport.id);
     setshowParaArrival(!showParaArrival);
   };
   // form submittion
@@ -196,6 +211,8 @@ const SearchBarComponent = () => {
       console.log(dateNum, depart, arrival);
 
       searchFlightSeach(depart, arrival, dateNum);
+      setArrivalInput("");
+      setDepartureInput("");
     }
   };
   return (
@@ -218,14 +235,9 @@ const SearchBarComponent = () => {
                 autoComplete="off"
                 onChange={handleChangeDeparture}
               />
-              {departureInput
-                ? filteredDepature?.map((airport) => (
-                    <p onClick={() => handleParaClickDeparture(airport)}>
-                      {!showParaDepature ? airport.name : ""}
-                    </p>
-                  ))
-                : ""}
+
               <CompareArrowsIcon className="form-svg" />
+
               <TextField
                 id="standard-basic"
                 name="arrival"
@@ -234,13 +246,41 @@ const SearchBarComponent = () => {
                 value={arrivalInput}
                 onChange={handleChangeArrival}
               />
-              {arrivalInput
+              <div className="depatureEl">
+                <ul className="ul-depart">
+                  {departureInput
+                    ? filteredDepature?.map((airport) => (
+                        <li onClick={() => handleParaClickDeparture(airport)}>
+                          {!showParaDepature
+                            ? airport.name.substring(0, 15)
+                            : ""}
+                        </li>
+                      ))
+                    : ""}
+                </ul>
+                <ul className="ul-arrive">
+                  {arrivalInput
+                    ? filteredArrival?.map((airport) => (
+                        <li onClick={() => handleParaClickArrival(airport)}>
+                          {!showParaArrival
+                            ? airport.name.substring(0, 15)
+                            : ""}
+                        </li>
+                      ))
+                    : ""}
+                </ul>
+              </div>
+              {/* <ul></ul> */}
+              {/* {arrivalInput
                 ? filteredArrival?.map((airport) => (
-                    <p onClick={() => handleParaClickArrival(airport)}>
+                    <p
+                      className="airportP"
+                      onClick={() => handleParaClickArrival(airport)}
+                    >
                       {!showParaArrival ? airport.name : ""}
                     </p>
                   ))
-                : ""}
+                : ""} */}
 
               {/* </form> */}
               <SearchBarDate
