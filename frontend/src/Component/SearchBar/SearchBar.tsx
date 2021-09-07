@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect } from "react";
 import styled from "styled-components";
 import { APP_COLOR } from "../../consistent";
 import FlightIcon from "@material-ui/icons/Flight";
@@ -106,33 +106,49 @@ const SearchBarComponent = () => {
   const [departureInput, setDepartureInput] = React.useState("");
 
   const airportList = useStore((state) => state.airportList);
+  // if (airportList) {
+  //   console.log(
+  //     airportList.filter((airport) => airport.name || airport.city === "oslo")
+  //       .length > 0
+  //   );
+  // }
 
   const flightSearch = useStore((state) => state.flightSearch);
   const searchFlightSeach = useStore((state) => state.searchFlightSeach);
 
+  // state change for search input
   const handleChangeArrival = (e: React.SyntheticEvent) => {
     const target = e.target as typeof e.target & {
       value: string;
     };
     e.preventDefault();
-    const arrival = target.value.toUpperCase();
-    if (arrival) {
-      setArrivalInput(arrival);
-      console.log("arrival", arrival);
-    }
+    const arrival = target.value;
+
+    setArrivalInput(arrival);
+    console.log("arrival", arrival);
   };
   const handleChangeDeparture = (e: React.SyntheticEvent) => {
     const target = e.target as typeof e.target & {
       value: string;
     };
     e.preventDefault();
-    const departure = target.value.toUpperCase();
-    if (departure) {
-      setDepartureInput(departure);
-      console.log("departure", departure);
-    }
+    const departure = target.value;
+
+    setDepartureInput(departure);
+    console.log("departure", departure);
   };
 
+  // useEffect for search filter
+  useEffect(() => {
+    if (airportList) {
+      const filterdAirports =
+        airportList.filter(
+          (airport) => airport.name && airport.city === departureInput
+        ).length > 0;
+      console.log(filterdAirports);
+    }
+  }, [departureInput]);
+  // form submittion
   const handleSubmit = (e: React.SyntheticEvent) => {
     const target = e.target as typeof e.target & {
       date: { value: number };
