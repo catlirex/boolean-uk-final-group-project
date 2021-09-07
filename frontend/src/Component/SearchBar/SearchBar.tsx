@@ -13,6 +13,7 @@ import { MaterialUiPickersDate } from "@material-ui/pickers/typings/date";
 
 import SimpleSelect from "./SearchBarTravelSelect";
 import useStore from "../../store";
+import { useHistory } from "react-router-dom";
 
 const StyledSearchBarWrapper = styled.section`
   background-image: url(${heroImg3});
@@ -96,6 +97,7 @@ export const PinkButton = withStyles(() => ({
 }))(Button);
 
 const SearchBarComponent = () => {
+  const history = useHistory();
   const [departureDate, setDepartureDate] = React.useState<
     Date | MaterialUiPickersDate
   >(new Date());
@@ -153,6 +155,7 @@ const SearchBarComponent = () => {
       console.log(dateNum, depart, arrival);
 
       searchFlightSeach(depart, arrival, dateNum);
+      history.push("/searchResult");
     }
   };
   return (

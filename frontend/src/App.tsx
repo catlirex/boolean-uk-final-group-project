@@ -9,6 +9,7 @@ import ModalContainer from "./modals/ModalContainer";
 import NoLoginHeader from "./Component/noLoginHeader";
 import FlightStatusPage from "./Page/FlightStatusPage";
 import MyBookingPage from "./Page/MyBookingPage";
+import SearchResultPage from "./Page/SearchResultPage";
 
 function App() {
   const airportList = useStore((state) => state.airportList);
@@ -34,6 +35,10 @@ function App() {
 
         <Route path="/myBooking" exact>
           <MyBookingPage />
+        </Route>
+
+        <Route path="/searchResult" exact>
+          <SearchResultPage />
         </Route>
 
         <Route>
