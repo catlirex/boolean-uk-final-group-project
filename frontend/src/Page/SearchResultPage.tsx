@@ -35,10 +35,12 @@ export default function SearchResultPage() {
   const setModal = useStore((state) => state.setModal);
   const loggedInUser = useStore((state) => state.loggedInUser);
   const history = useHistory();
+  const outboundBooking = useStore((state) => state.outboundBooking);
 
   const handleClick = () => {
-    if (loggedInUser) history.push("/bookingForm");
-    else setModal("logIn");
+    if (loggedInUser && outboundBooking) history.push("/bookingForm");
+    if (!loggedInUser && outboundBooking) setModal("logIn");
+    else setModal("selectFlight");
   };
 
   return (
