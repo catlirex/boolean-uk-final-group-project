@@ -106,12 +106,6 @@ const SearchBarComponent = () => {
   const [departureInput, setDepartureInput] = React.useState("");
 
   const airportList = useStore((state) => state.airportList);
-  // if (airportList) {
-  //   console.log(
-  //     airportList.filter((airport) => airport.name || airport.city === "oslo")
-  //       .length > 0
-  //   );
-  // }
 
   const flightSearch = useStore((state) => state.flightSearch);
   const searchFlightSeach = useStore((state) => state.searchFlightSeach);
