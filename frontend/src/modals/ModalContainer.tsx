@@ -4,6 +4,7 @@ import useStore from "../store";
 import LogInModal from "./LogInModal";
 import SignUpModal from "./SignUpModal";
 import LoginErrorModal from "./LoginErrorModal";
+import FlightBookingError from "./FlightBookingError";
 // const useStyles = makeStyles((theme) => ({
 //   modal: {
 //     border: theme(2),
@@ -14,7 +15,7 @@ const StyledContainer = styled.div`
   position: absolute;
   top: 0;
   left: 0;
-  height: 100vh;
+  height: 100%;
   width: 100vw;
   display: grid;
   place-content: center;
@@ -45,6 +46,7 @@ function ModalContainer() {
         {modal === "logIn" ? <LogInModal /> : null}
         {modal === "signUp" ? <SignUpModal /> : null}
         {modal === "loginError" ? <LoginErrorModal /> : null}
+        {modal === "selectFlight" ? <FlightBookingError /> : null}
       </div>
     </StyledContainer>
   );
