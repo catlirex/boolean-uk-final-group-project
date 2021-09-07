@@ -40,7 +40,6 @@ export type FlightStatusType = {
   time: string;
 };
 
-
 type TicketType = {
   bookingId?: number;
   class: "econ" | "first" | "business";
@@ -105,7 +104,18 @@ type newBookingType = {
     weight: number;
   }[];
   tickets: TicketType[];
-
+};
+export type ScheduledFlightList = {
+  date: number;
+  time: string;
+  economicPrice: number;
+  businessPrice: number;
+  firstClassPrice: number;
+  flightNumber: FlightNumberType;
+  flightNumberId: string;
+  gateNumber: string;
+  status: string;
+  passengers: TicketType[];
 };
 
 type StoreType = {
@@ -127,12 +137,10 @@ type StoreType = {
   flightStatus: null | undefined | FlightStatusType;
   searchFlightStatus: (flightNumber: string, date: number) => void;
 
-  
   departureFlightList: ScheduledFlightList[];
   setDepartureFlightList: (airportCode: string) => void;
   selectedAirport: AirportType | null;
   setSelectedAirport: (id: string) => void;
-
 
   userBooking: null | UserBookingType[];
   getUserBooking: () => void;
@@ -144,7 +152,6 @@ type StoreType = {
   outboundBooking: null | newBookingType;
   inboundBooking: null | newBookingType;
   selectOutboundFlight: (arg: TicketType) => void;
-
 };
 
 export type User = {
@@ -160,7 +167,6 @@ export type userCredentials = {
   email: string;
   password: string;
   role?: string;
-
 };
 
 export type signUpUserCredentials = {
@@ -185,8 +191,7 @@ const useStore = create<StoreType>((set, get) => ({
   setSearchResult: () => {},
 
   // LOGIN STUFF
-  role: "",
-  setRole: (role) => set({ role }),
+
   userCredentials: {
     email: null,
     password: null,
@@ -265,7 +270,6 @@ const useStore = create<StoreType>((set, get) => ({
     set({ departureFlightList: scheduledFlightByDeparture });
   },
 
-
   userBooking: null,
   getUserBooking: async () => {
     if (!get().loggedInUser) return;
@@ -314,7 +318,6 @@ const useStore = create<StoreType>((set, get) => ({
     set({ outboundBooking: { tickets: [ticket] } });
   },
   inboundBooking: null,
-
 }));
 
 export default useStore;

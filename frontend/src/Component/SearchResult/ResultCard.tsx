@@ -109,10 +109,10 @@ export default function ResultCard({ data }: Props) {
 
   const selectOutboundFlight = useStore((state) => state.selectOutboundFlight);
   const departAirport = airportList?.find(
-    (target) => target.id === arrivalAirportId
+    (target) => target.id === departureAirportId
   );
   const arrivalAirport = airportList?.find(
-    (target) => target.id === departureAirportId
+    (target) => target.id === arrivalAirportId
   );
   const [priceDisplayed, setPriceDisplayed] = useState(false);
 
@@ -127,6 +127,7 @@ export default function ResultCard({ data }: Props) {
     });
     setPriceDisplayed(!priceDisplayed);
   };
+  console.log(outboundBooking);
 
   if (
     outboundBooking &&

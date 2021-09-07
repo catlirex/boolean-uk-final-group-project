@@ -6,6 +6,7 @@ import { withStyles } from "@material-ui/core/styles";
 import Button from "@material-ui/core/Button";
 import ButtonGroup from "@material-ui/core/ButtonGroup";
 import useStore from "../store";
+import { useHistory } from "react-router-dom";
 
 const StyledHeader = styled.header`
   background-color: ${APP_COLOR.pink};
@@ -70,6 +71,7 @@ const PinkButton = withStyles(() => ({
 
 export default function NoLoginHeader() {
   const setModal = useStore((state) => state.setModal);
+  const history = useHistory();
 
   return (
     <StyledHeader>
@@ -81,9 +83,13 @@ export default function NoLoginHeader() {
             color="primary"
             aria-label="text primary button group"
           >
-            <NavButton>Buy Ticket</NavButton>
-            <NavButton>Flight Status</NavButton>
-            <NavButton>Check In</NavButton>
+            <NavButton onClick={() => history.push("/")}>Buy Ticket</NavButton>
+            <NavButton onClick={() => history.push("/flightStatus")}>
+              Flight Status
+            </NavButton>
+            <NavButton onClick={() => history.push("/myBooking")}>
+              Check In
+            </NavButton>
           </ButtonGroup>
         </ul>
       </nav>

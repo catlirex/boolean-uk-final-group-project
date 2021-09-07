@@ -40,7 +40,7 @@ export default function SearchResultPage() {
   const handleClick = () => {
     if (loggedInUser && outboundBooking) history.push("/bookingForm");
     if (!loggedInUser && outboundBooking) setModal("logIn");
-    else setModal("selectFlight");
+    if (!outboundBooking) setModal("selectFlight");
   };
 
   return (

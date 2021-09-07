@@ -6,7 +6,7 @@ import { withStyles } from "@material-ui/core/styles";
 import Button from "@material-ui/core/Button";
 import ButtonGroup from "@material-ui/core/ButtonGroup";
 import useStore from "../store";
-import { Link } from "react-router-dom";
+import { Link, useHistory } from "react-router-dom";
 
 const StyledHeader = styled.header`
   background-color: ${APP_COLOR.pink};
@@ -72,6 +72,7 @@ export const PinkButton = withStyles(() => ({
 
 export default function LoginHeader() {
   const logOut = useStore((state) => state.logOut);
+  const history = useHistory();
   return (
     <StyledHeader>
       <img className="app-logo" src={logo}></img>
@@ -82,14 +83,23 @@ export default function LoginHeader() {
             color="primary"
             aria-label="text primary button group"
           >
-            <NavButton>Buy Ticket</NavButton>
-            <NavButton>Flight Status</NavButton>
-            <NavButton>Check In</NavButton>
+            <NavButton onClick={() => history.push("/")}>Buy Ticket</NavButton>
+            <NavButton onClick={() => history.push("/flightStatus")}>
+              Flight Status
+            </NavButton>
+            <NavButton onClick={() => history.push("/myBooking")}>
+              Check In
+            </NavButton>
           </ButtonGroup>
         </ul>
       </nav>
       <div>
-        <PinkButton variant="contained">My Flight</PinkButton>
+        <PinkButton
+          variant="contained"
+          onClick={() => history.push("/myBooking")}
+        >
+          My Flight
+        </PinkButton>
 
         <Link to="/">
           <PinkButton onClick={logOut} variant="contained">

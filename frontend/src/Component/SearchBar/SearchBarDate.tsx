@@ -11,7 +11,7 @@ import {
 } from "@material-ui/pickers";
 import { ParsableDate } from "@material-ui/pickers/constants/prop-types";
 
-type SearchBarPorpsType = {
+type SearchBarPropsType = {
   setDepartureDate: (date: MaterialUiPickersDate) => void;
   setArrivalDate: (date: MaterialUiPickersDate) => void;
   arrivalDate: ParsableDate;
@@ -22,7 +22,7 @@ export default function SearchBarDate({
   setArrivalDate,
   arrivalDate,
   departureDate,
-}: SearchBarPorpsType) {
+}: SearchBarPropsType) {
   const handleDepartureDateChange = (date: MaterialUiPickersDate) => {
     // console.log(setDepartureDate);
     setDepartureDate(date);
