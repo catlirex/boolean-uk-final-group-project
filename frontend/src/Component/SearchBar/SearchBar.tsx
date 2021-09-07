@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import styled from "styled-components";
 import { APP_COLOR } from "../../consistent";
 import FlightIcon from "@material-ui/icons/Flight";
@@ -72,6 +72,21 @@ const StyledSearchBarFormSection = styled.form`
 
     align-items: center;
   } */
+
+  .depatureEl {
+    display: inline-block;
+  }
+
+  .ul-depart {
+    display: inline-block;
+
+    min-width: 190px;
+  }
+
+  .ul-arrive {
+    display: inline-block;
+  }
+  display: inline-block;
   .form-svg {
     margin-top: 20px;
   }
@@ -107,39 +122,83 @@ const SearchBarComponent = () => {
   const [arrivalInput, setArrivalInput] = React.useState("");
   const [departureInput, setDepartureInput] = React.useState("");
 
+  const [showParaDepature, setshowParaDepature] = useState<boolean>(false);
+  const [showParaArrival, setshowParaArrival] = useState<boolean>(false);
+
   const airportList = useStore((state) => state.airportList);
 
   const flightSearch = useStore((state) => state.flightSearch);
   const searchFlightSeach = useStore((state) => state.searchFlightSeach);
 
+  // state change for search input
   const handleChangeArrival = (e: React.SyntheticEvent) => {
     const target = e.target as typeof e.target & {
       value: string;
     };
     e.preventDefault();
-    const arrival = target.value.toUpperCase();
-    if (arrival) {
-      setArrivalInput(arrival);
-      console.log("arrival", arrival);
-    }
+    const arrival = target.value;
+
+    setArrivalInput(arrival);
   };
   const handleChangeDeparture = (e: React.SyntheticEvent) => {
     const target = e.target as typeof e.target & {
       value: string;
     };
     e.preventDefault();
-    const departure = target.value.toUpperCase();
-    if (departure) {
-      setDepartureInput(departure);
-      console.log("departure", departure);
-    }
+    const departure = target.value;
+
+    setDepartureInput(departure);
   };
 
+  // departure filter
+  const airportSearchDeparture = () => {
+    return airportList?.filter((airport) => {
+      if (
+        airport.name.toLowerCase().includes(departureInput.toLowerCase()) ||
+        airport.city.toLowerCase().includes(departureInput.toLowerCase()) ||
+        airport.id.toLowerCase().includes(departureInput.toLowerCase())
+      ) {
+        return airport;
+      }
+    });
+  };
+
+  // // arrival filter
+  const airportSearch = () => {
+    return airportList?.filter((airport) => {
+      if (
+        airport.name.toLowerCase().includes(arrivalInput.toLowerCase()) ||
+        airport.city.toLowerCase().includes(arrivalInput.toLowerCase()) ||
+        airport.id.toLowerCase().includes(arrivalInput.toLowerCase())
+      ) {
+        return airport;
+      }
+    });
+  };
+  const filteredDepature = airportSearchDeparture();
+
+  const filteredArrival = airportSearch();
+
+  // handle para click departure
+  const handleParaClickDeparture = (airport: any) => {
+    if (!airport) return;
+    if (airport.id) setDepartureInput(airport.id);
+    setshowParaDepature(!showParaDepature);
+  };
+
+  // handle para click arrival
+  const handleParaClickArrival = (airport: any) => {
+    if (!airport) return;
+    if (airport.id) setArrivalInput(airport.id);
+    setshowParaArrival(!showParaArrival);
+  };
+  // form submittion
   const handleSubmit = (e: React.SyntheticEvent) => {
     const target = e.target as typeof e.target & {
       date: { value: number };
       depart: { value: string };
       arrival: { value: string };
+      reset: () => void;
     };
     e.preventDefault();
 
@@ -157,6 +216,9 @@ const SearchBarComponent = () => {
       searchFlightSeach(depart, arrival, dateNum);
       history.push("/searchResult");
     }
+    target.reset();
+    setDepartureInput("");
+    setArrivalInput("");
   };
   return (
     <>
@@ -175,9 +237,12 @@ const SearchBarComponent = () => {
                 label="From"
                 color="secondary"
                 value={departureInput}
+                autoComplete="off"
                 onChange={handleChangeDeparture}
               />
+
               <CompareArrowsIcon className="form-svg" />
+
               <TextField
                 id="standard-basic"
                 name="arrival"
@@ -186,6 +251,41 @@ const SearchBarComponent = () => {
                 value={arrivalInput}
                 onChange={handleChangeArrival}
               />
+              <div className="depatureEl">
+                <ul className="ul-depart">
+                  {departureInput
+                    ? filteredDepature?.map((airport) => (
+                        <li onClick={() => handleParaClickDeparture(airport)}>
+                          {!showParaDepature
+                            ? airport.name.substring(0, 15)
+                            : ""}
+                        </li>
+                      ))
+                    : ""}
+                </ul>
+                <ul className="ul-arrive">
+                  {arrivalInput
+                    ? filteredArrival?.map((airport) => (
+                        <li onClick={() => handleParaClickArrival(airport)}>
+                          {!showParaArrival
+                            ? airport.name.substring(0, 15)
+                            : ""}
+                        </li>
+                      ))
+                    : ""}
+                </ul>
+              </div>
+              {/* <ul></ul> */}
+              {/* {arrivalInput
+                ? filteredArrival?.map((airport) => (
+                    <p
+                      className="airportP"
+                      onClick={() => handleParaClickArrival(airport)}
+                    >
+                      {!showParaArrival ? airport.name : ""}
+                    </p>
+                  ))
+                : ""} */}
 
               {/* </form> */}
               <SearchBarDate
