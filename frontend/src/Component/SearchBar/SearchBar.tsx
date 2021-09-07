@@ -131,35 +131,34 @@ const SearchBarComponent = () => {
   };
 
   // departure filter
-  const airportSearchDeparture = () => {
-    return airportList?.filter((airport) => {
-      if (
-        airport.name.toLowerCase().includes(departureInput.toLowerCase()) ||
-        airport.city.toLowerCase().includes(departureInput.toLowerCase()) ||
-        airport.id.toLowerCase().includes(departureInput.toLowerCase())
-      ) {
-        return airport;
-      }
-    });
-  };
-
-  const filteredDepature = airportSearchDeparture();
-  if (filteredDepature) console.log(filteredDepature[0].id);
+  // const airportSearchDeparture = () => {
+  //   return airportList?.filter((airport) => {
+  //     if (
+  //       airport.name.toLowerCase().includes(departureInput.toLowerCase()) ||
+  //       airport.city.toLowerCase().includes(departureInput.toLowerCase()) ||
+  //       airport.id.toLowerCase().includes(departureInput.toLowerCase())
+  //     ) {
+  //       return airport;
+  //     }
+  //   });
+  // };
 
   // // arrival filter
-  const airportSearchArrival = () => {
+  const airportSearch = (string: string) => {
     return airportList?.filter((airport) => {
       if (
-        airport.name.toLowerCase().includes(arrivalInput.toLowerCase()) ||
-        airport.city.toLowerCase().includes(arrivalInput.toLowerCase()) ||
-        airport.id.toLowerCase().includes(arrivalInput.toLowerCase())
+        airport.name.toLowerCase().includes(string.toLowerCase()) ||
+        airport.city.toLowerCase().includes(string.toLowerCase()) ||
+        airport.id.toLowerCase().includes(string.toLowerCase())
       ) {
         return airport;
       }
     });
   };
+  const filteredDepature = airportSearch(departureInput);
+  if (filteredDepature) console.log(filteredDepature[0].id);
 
-  const filteredArrival = airportSearchArrival();
+  const filteredArrival = airportSearch(arrivalInput);
   if (filteredArrival) console.log(filteredArrival[0].id);
   // form submittion
   const handleSubmit = (e: React.SyntheticEvent) => {
