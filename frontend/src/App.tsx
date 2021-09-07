@@ -10,6 +10,7 @@ import NoLoginHeader from "./Component/noLoginHeader";
 import FlightStatusPage from "./Page/FlightStatusPage";
 import MyBookingPage from "./Page/MyBookingPage";
 import SearchResultPage from "./Page/SearchResultPage";
+import BookingFormPage from "./Page/BookingFormPage";
 
 function App() {
   const airportList = useStore((state) => state.airportList);
@@ -39,6 +40,10 @@ function App() {
 
         <Route path="/searchResult" exact>
           <SearchResultPage />
+        </Route>
+
+        <Route path="/bookingForm" exact>
+          <BookingFormPage />
         </Route>
 
         <Route>

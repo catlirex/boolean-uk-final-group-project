@@ -105,6 +105,9 @@ export default function ResultCard({ data }: Props) {
   const { id, arrivalAirportId, departureAirportId, durationHour } =
     flightNumber;
   const airportList = useStore((state) => state.airportList);
+  const outboundBooking = useStore((state) => state.outboundBooking);
+
+  const selectOutboundFlight = useStore((state) => state.selectOutboundFlight);
   const departAirport = airportList?.find(
     (target) => target.id === arrivalAirportId
   );
@@ -116,6 +119,21 @@ export default function ResultCard({ data }: Props) {
   const handleClick = () => {
     setPriceDisplayed(!priceDisplayed);
   };
+
+  const handleSelect = (classChosen: "econ" | "first" | "business") => {
+    selectOutboundFlight({
+      class: classChosen,
+      scheduledFlightId: data.id,
+    });
+    setPriceDisplayed(!priceDisplayed);
+  };
+
+  if (
+    outboundBooking &&
+    outboundBooking?.tickets[0].scheduledFlightId !== data.id
+  )
+    return null;
+
   return (
     <StyledLi>
       <div className="card-container">
@@ -139,9 +157,16 @@ export default function ResultCard({ data }: Props) {
             <p>{arrivalAirport?.city}</p>
           </div>
         </div>
-        <SquareButton variant="contained" onClick={() => handleClick()}>
-          Show prices from £{economicPrice}{" "}
-        </SquareButton>
+
+        {outboundBooking ? (
+          <SquareButton variant="contained" onClick={() => handleClick()}>
+            <span>Selected: {outboundBooking.tickets[0].class}</span>
+          </SquareButton>
+        ) : (
+          <SquareButton variant="contained" onClick={() => handleClick()}>
+            <span>Show prices from £{economicPrice}</span>
+          </SquareButton>
+        )}
       </div>
       <div
         className="togglePrice"
@@ -170,7 +195,12 @@ export default function ResultCard({ data }: Props) {
             <h3>£ {firstClassPrice}</h3>
           </div>
 
-          <SquareButton variant="contained">Select</SquareButton>
+          <SquareButton
+            variant="contained"
+            onClick={() => handleSelect("first")}
+          >
+            Select
+          </SquareButton>
         </div>
         <div className="class-price">
           <h2>Business class</h2>
@@ -192,7 +222,12 @@ export default function ResultCard({ data }: Props) {
             <h3>£ {businessPrice}</h3>
           </div>
 
-          <SquareButton variant="contained">Select</SquareButton>
+          <SquareButton
+            variant="contained"
+            onClick={() => handleSelect("business")}
+          >
+            Select
+          </SquareButton>
         </div>
         <div className="class-price">
           <h2>Econ class</h2>
@@ -204,7 +239,12 @@ export default function ResultCard({ data }: Props) {
             <LocalOfferIcon className="icon" />
             <h3>£ {economicPrice}</h3>
           </div>
-          <SquareButton variant="contained">Select</SquareButton>
+          <SquareButton
+            variant="contained"
+            onClick={() => handleSelect("econ")}
+          >
+            Select
+          </SquareButton>
         </div>
       </div>
     </StyledLi>
