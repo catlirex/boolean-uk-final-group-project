@@ -136,25 +136,7 @@ const SearchBarComponent = () => {
     setDepartureInput(departure);
   };
 
-  // useEffect for search filter
-  // useEffect(() => {
-  //   if (airportList) {
-  //     // const filterdAirports =
-  //     //   airportList.filter(
-  //     //     (airport) => airport.name && airport.city === departureInput
-  //     //   ).length > 0;
-  //     let filterdAirports: any = null;
-  //     airportList.filter((airport) => {
-  //       if (airport.name && airport.city === departureInput) {
-  //         return (filterdAirports = airport.id);
-  //       }
-  //       console.log("Departure", departureInput, filterdAirports);
-  //     });
-  //   }
-  // }, [departureInput]);
-
-  // Option two instead of useEffect
-
+  // departure filter
   const airportSearchDeparture = () => {
     return airportList?.filter((airport) => {
       if (
@@ -170,6 +152,21 @@ const SearchBarComponent = () => {
   const filteredDepature = airportSearchDeparture();
   if (filteredDepature) console.log(filteredDepature[0].id);
 
+  // // arrival filter
+  const airportSearchArrival = () => {
+    return airportList?.filter((airport) => {
+      if (
+        airport.name.toLowerCase().includes(arrivalInput.toLowerCase()) ||
+        airport.city.toLowerCase().includes(arrivalInput.toLowerCase()) ||
+        airport.id.toLowerCase().includes(arrivalInput.toLowerCase())
+      ) {
+        return airport;
+      }
+    });
+  };
+
+  const filteredArrival = airportSearchArrival();
+  if (filteredArrival) console.log(filteredArrival[0].id);
   // form submittion
   const handleSubmit = (e: React.SyntheticEvent) => {
     const target = e.target as typeof e.target & {
@@ -228,6 +225,13 @@ const SearchBarComponent = () => {
                 value={arrivalInput}
                 onChange={handleChangeArrival}
               />
+              {arrivalInput
+                ? filteredArrival?.map((airport) => (
+                    <p onClick={() => setArrivalInput(airport.id)}>
+                      {airport.name}
+                    </p>
+                  ))
+                : ""}
 
               {/* </form> */}
               <SearchBarDate
