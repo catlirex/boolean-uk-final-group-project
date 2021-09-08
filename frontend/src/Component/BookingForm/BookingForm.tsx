@@ -13,6 +13,8 @@ import Checkbox from "@material-ui/core/Checkbox";
 import Link from "@material-ui/core/Link";
 import Grid from "@material-ui/core/Grid";
 import BookingButtons from "./BookingButtons";
+import { APP_COLOR } from "../../consistent";
+import { Fireplace } from "@material-ui/icons";
 
 const useStyles = makeStyles((theme) => ({
   main: {
@@ -23,9 +25,26 @@ const useStyles = makeStyles((theme) => ({
     display: "flex",
     alignItems: "center",
   },
-  paper: {
-    padding: theme.spacing(2),
-    textAlign: "center",
+  luggageOptions: {
+    display: "grid",
+    alignItems: "center",
+    background: APP_COLOR.lightPink,
+    width: "200px",
+    height: "100px",
+    border: "1px, solid black",
+    borderRadius: "5px",
+  },
+  luggageText: {
+    display: "block",
+    marginLeft: "auto",
+    marginRight: "auto",
+    marginBottom: theme.spacing(5),
+  },
+  boxWrapper: {
+    display: "grid",
+    gridTemplateColumns: "repeat(3, 1fr)",
+    marginTop: "30px",
+    gridGap: theme.spacing(8),
   },
 }));
 
@@ -50,6 +69,53 @@ const BookingForm = () => {
 
                 <Typography component="p">Need to check stock</Typography>
                 <BookingButtons />
+              </Grid>
+              <Grid>
+                <Typography component="p">Whant more luggage?</Typography>
+                <Grid className={classes.boxWrapper}>
+                  <Grid
+                    container
+                    direction="column"
+                    alignItems="center"
+                    spacing={2}
+                    justifyContent="space-between"
+                  >
+                    <div className={classes.luggageOptions}>
+                      <Typography className={classes.luggageText}>
+                        Luggage Option 10kg
+                      </Typography>
+                    </div>
+                    <BookingButtons />
+                  </Grid>
+                  <Grid
+                  // container
+                  // direction="column"
+                  // alignItems="center"
+                  // spacing={2}
+                  // justifyContent="space-between"
+                  >
+                    <div className={classes.luggageOptions}>
+                      <Typography className={classes.luggageText}>
+                        Luggage Option 20kg
+                      </Typography>
+                    </div>
+                    <BookingButtons />
+                  </Grid>
+                  <Grid
+                    container
+                    direction="column"
+                    alignItems="center"
+                    spacing={2}
+                    justifyContent="space-between"
+                  >
+                    <div className={classes.luggageOptions}>
+                      <Typography className={classes.luggageText}>
+                        Luggage Option 30kg
+                      </Typography>
+                    </div>
+                    <BookingButtons />
+                  </Grid>
+                </Grid>
               </Grid>
             </Grid>
           </Grid>
