@@ -52,8 +52,6 @@ function LogInModal() {
   const setUserCredentials = useStore((state) => state.setUserCredentials);
   const setLoginUser = useStore((state) => state.setLoginUser);
   const loggedInUser = useStore((state) => state.loggedInUser);
-  const role = useStore((state) => state.role);
-  const setRole = useStore((state) => state.setRole);
 
   // 1) Check role when user login, if staff redirect to staff page
   // 2) staff homepage: staff header + staff left nav bar
