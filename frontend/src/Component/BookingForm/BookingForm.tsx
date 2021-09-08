@@ -16,15 +16,16 @@ import BookingButtons from "./BookingButtons";
 
 const useStyles = makeStyles((theme) => ({
   main: {
-    marginTop: theme.spacing(8),
-    display: "flex",
-    flexDirection: "column",
-    alignItems: "center",
+    marginTop: theme.spacing(10),
   },
   form: {},
   passengersNum: {
     display: "flex",
     alignItems: "center",
+  },
+  paper: {
+    padding: theme.spacing(2),
+    textAlign: "center",
   },
 }));
 
@@ -33,14 +34,20 @@ const BookingForm = () => {
 
   const classes = useStyles();
   return (
-    <Container component="main" maxWidth="xs">
+    <Container component="main" maxWidth="sm">
       <CssBaseline />
       <div className={classes.main}>
         <form className={classes.form}>
           <Grid container spacing={2}>
             <Grid item xs={12}>
-              <Grid item xs={6}>
+              <Grid
+                container
+                direction="row"
+                justifyContent="space-between"
+                alignItems="center"
+              >
                 <Typography component="h3">Number Of Passengers</Typography>
+
                 <Typography component="p">Need to check stock</Typography>
                 <BookingButtons />
               </Grid>
