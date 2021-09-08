@@ -159,6 +159,7 @@ type StoreType = {
   outboundBooking: null | newBookingType;
   inboundBooking: null | newBookingType;
   selectOutboundFlight: (arg: TicketType) => void;
+  selectInboundFlight: (arg: TicketType) => void;
 };
 
 export type User = {
@@ -375,6 +376,9 @@ const useStore = create<StoreType>((set, get) => ({
     set({ outboundBooking: { tickets: [ticket] } });
   },
   inboundBooking: null,
+  selectInboundFlight: (ticket) => {
+    set({ inboundBooking: { tickets: [ticket] } });
+  },
 }));
 
 export default useStore;

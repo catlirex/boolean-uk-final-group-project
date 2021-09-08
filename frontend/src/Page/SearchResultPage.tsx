@@ -7,6 +7,7 @@ import { withStyles } from "@material-ui/core/styles";
 import { APP_COLOR } from "../consistent";
 import useStore from "../store";
 import { useHistory } from "react-router-dom";
+import ArrivalSearchResult from "../Component/SearchResult/ArrivalSearchResult";
 
 const StyledMain = styled.main`
   display: grid;
@@ -47,6 +48,7 @@ export default function SearchResultPage() {
     <StyledMain>
       <ResultPageHeader />
       <DepartSearchResult />
+      <ArrivalSearchResult />
       {flightSearch || flightSearchNoDate ? (
         <SquareButton onClick={() => handleClick()}>
           Complete Booking Form
