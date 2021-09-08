@@ -147,8 +147,15 @@ type StoreType = {
 
   flightSearch: null | undefined | FlightSearchTypeOne[];
   flightSearchNoDate: null | undefined | FlightSearchTypeOne[];
+  arrivalFlightSearch: null | undefined | FlightSearchTypeOne[];
+  arrivalFlightSearchNoDate: null | undefined | FlightSearchTypeOne[];
   resetSearch: () => void;
-  searchFlightSeach: (depart: string, arrival: string, date?: number) => void;
+  searchFlightSeach: (
+    depart: string,
+    arrival: string,
+    dateDepart?: number,
+    deteArrival?: number
+  ) => void;
   outboundBooking: null | newBookingType;
   inboundBooking: null | newBookingType;
   selectOutboundFlight: (arg: TicketType) => void;
@@ -285,6 +292,8 @@ const useStore = create<StoreType>((set, get) => ({
   },
   flightSearch: null,
   flightSearchNoDate: null,
+  arrivalFlightSearch: null,
+  arrivalFlightSearchNoDate: null,
   resetSearch: () => {
     set({
       flightSearch: null,
@@ -292,24 +301,72 @@ const useStore = create<StoreType>((set, get) => ({
       outboundBooking: null,
     });
   },
-  searchFlightSeach: async (depart, arrival, date) => {
-    if (date && depart && arrival) {
-      const flightSearchFromServer = await fetch(
-        `http://localhost:3000/scheduledFlight/?date=${date}&depart=${depart}&arrival=${arrival}`
+  searchFlightSeach: async (depart, arrival, dateDepart, dateArrival) => {
+    if (dateDepart && dateArrival && depart && arrival) {
+      const departureFlightSearchFromServer = await fetch(
+        `http://localhost:3000/scheduledFlight/?date=${dateDepart}&depart=${depart}&arrival=${arrival}`
       ).then((res) => res.json());
-      console.log(flightSearchFromServer);
+      console.log("Depart with date", departureFlightSearchFromServer);
 
-      if (flightSearchFromServer.data.length)
-        set({ flightSearch: flightSearchFromServer.data });
+      const arrivalFlightSearchFromServer = await fetch(
+        `http://localhost:3000/scheduledFlight/?date=${dateArrival}&arrival=${depart}&depart=${arrival}`
+      ).then((res) => res.json());
+      console.log("Arrival with date", arrivalFlightSearchFromServer);
+
+      if (departureFlightSearchFromServer.data.length)
+        set({
+          flightSearch: departureFlightSearchFromServer.data,
+        });
       else {
+        set({ flightSearchNoDate: undefined });
         const flightSearchFromServerWithoutDate = await fetch(
           `http://localhost:3000/scheduledFlight/?depart=${depart}&arrival=${arrival}`
         ).then((res) => res.json());
-        console.log(flightSearchFromServerWithoutDate);
+        console.log("depart with no date", flightSearchFromServerWithoutDate);
         if (flightSearchFromServerWithoutDate.data.length)
           set({ flightSearchNoDate: flightSearchFromServerWithoutDate.data });
         else set({ flightSearchNoDate: undefined });
       }
+
+      if (arrivalFlightSearchFromServer.data.length)
+        set({
+          arrivalFlightSearch: arrivalFlightSearchFromServer.data,
+        });
+      else {
+        set({ arrivalFlightSearchNoDate: undefined });
+        const arrivalFlightSearchFromServerWithoutDate = await fetch(
+          `http://localhost:3000/scheduledFlight/?depart=${arrival}&arrival=${depart}`
+        ).then((res) => res.json());
+        console.log(
+          "arrival with no date",
+          arrivalFlightSearchFromServerWithoutDate
+        );
+        if (arrivalFlightSearchFromServerWithoutDate.data.length)
+          set({
+            arrivalFlightSearchNoDate:
+              arrivalFlightSearchFromServerWithoutDate.data,
+          });
+        else set({ arrivalFlightSearchNoDate: undefined });
+      }
+      // if (
+      //   departureFlightSearchFromServer.data.length &&
+      //   arrivalFlightSearchFromServer.data.length
+      // ) {
+      //   console.log(arrivalFlightSearchFromServer.data);
+
+      //   set({
+      //     flightSearch: arrivalFlightSearchFromServer.data,
+      //   });
+      // } else {
+      //   set({ flightSearchNoDate: undefined });
+      //   const flightSearchFromServerWithoutDate = await fetch(
+      //     `http://localhost:3000/scheduledFlight/?depart=${depart}&arrival=${arrival}`
+      //   ).then((res) => res.json());
+      //   console.log(flightSearchFromServerWithoutDate);
+      //   if (flightSearchFromServerWithoutDate.data.length)
+      //     set({ flightSearchNoDate: flightSearchFromServerWithoutDate.data });
+      //   else set({ flightSearchNoDate: undefined });
+      // }
     }
   },
 
