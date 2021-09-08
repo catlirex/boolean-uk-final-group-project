@@ -99,15 +99,15 @@ const StyledLi = styled.li`
     justify-content: space-between;
   }
 `;
-export default function ResultCard({ data }: Props) {
+export default function ArrivalResultCard({ data }: Props) {
   const { date, flightNumber, economicPrice, businessPrice, firstClassPrice } =
     data;
   const { id, arrivalAirportId, departureAirportId, durationHour } =
     flightNumber;
   const airportList = useStore((state) => state.airportList);
-  const outboundBooking = useStore((state) => state.outboundBooking);
+  const inboundBooking = useStore((state) => state.inboundBooking);
 
-  const selectOutboundFlight = useStore((state) => state.selectOutboundFlight);
+  const selectInboundFlight = useStore((state) => state.selectInboundFlight);
   const departAirport = airportList?.find(
     (target) => target.id === departureAirportId
   );
@@ -121,17 +121,17 @@ export default function ResultCard({ data }: Props) {
   };
 
   const handleSelect = (classChosen: "econ" | "first" | "business") => {
-    selectOutboundFlight({
+    selectInboundFlight({
       class: classChosen,
       scheduledFlightId: data.id,
     });
     setPriceDisplayed(!priceDisplayed);
   };
-  console.log("outboundBooking", outboundBooking);
+  console.log("inboundBooking", inboundBooking);
 
   if (
-    outboundBooking &&
-    outboundBooking?.tickets[0].scheduledFlightId !== data.id
+    inboundBooking &&
+    inboundBooking?.tickets[0].scheduledFlightId !== data.id
   )
     return null;
 
@@ -159,9 +159,9 @@ export default function ResultCard({ data }: Props) {
           </div>
         </div>
 
-        {outboundBooking ? (
+        {inboundBooking ? (
           <SquareButton variant="contained" onClick={() => handleClick()}>
-            <span>Selected: {outboundBooking.tickets[0].class}</span>
+            <span>Selected: {inboundBooking.tickets[0].class}</span>
           </SquareButton>
         ) : (
           <SquareButton variant="contained" onClick={() => handleClick()}>
