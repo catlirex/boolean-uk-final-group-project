@@ -12,27 +12,13 @@ const BookingButtons = ({
   handleIncrement,
   handleDecrement,
 }: BookingButtonsTypes) => {
-  // const [counter, setCounter] = useState(0);
-
-  // const handleIncrement = () => {
-  //   const newCount = counter + 1;
-  //   setCounter(newCount);
-  //   setNumberOfPassangers(newCount);
-  //   handlePas();
-  // };
-
-  // const handleDecrement = () => {
-  //   const newCount = counter - 1;
-  //   setCounter(newCount);
-  // };
-
-  // const displayCounter = counter > 0;
+  const displayCounter = valueToShow > 0;
 
   return (
     <ButtonGroup size="small" aria-label="small outlined button group">
       <Button onClick={handleIncrement}>+</Button>
-      {<Button disabled>{valueToShow}</Button>}
-      {<Button onClick={handleDecrement}>-</Button>}
+      {displayCounter && <Button disabled>{valueToShow}</Button>}
+      {displayCounter && <Button onClick={handleDecrement}>-</Button>}
     </ButtonGroup>
   );
 };
