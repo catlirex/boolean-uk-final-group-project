@@ -14,7 +14,7 @@ import Link from "@material-ui/core/Link";
 import Grid from "@material-ui/core/Grid";
 import BookingButtons from "./BookingButtons";
 import { APP_COLOR } from "../../consistent";
-import { Fireplace } from "@material-ui/icons";
+import { Fireplace, FormatListNumberedRtl } from "@material-ui/icons";
 
 const useStyles = makeStyles((theme) => ({
   main: {
@@ -49,8 +49,18 @@ const useStyles = makeStyles((theme) => ({
 }));
 
 const BookingForm = () => {
-  const [numberOfPassCounter, setnumberOfPassCounter] = useState("0");
+  const [numberOfPassangers, setNumberOfPassangers] = useState(0);
+  const [numberOf10KgLuggage, setNumberOf10KgLuggage] = useState(0);
+  const [numberOf20KgLuggage, setNumberOf20KgLuggage] = useState(0);
+  const [numberOf30KgLuggage, setNumberOf30KgLuggage] = useState(0);
 
+  // const handlePas = () => {
+  //   const newCount = numberOf10KgLuggage + 1;
+
+  //   setNumberOf10KgLuggage(newCount);
+  // };
+  console.log("num of passengers", numberOfPassangers);
+  console.log("num of 10kg Luggage", numberOf10KgLuggage);
   const classes = useStyles();
   return (
     <Container component="main" maxWidth="sm">
@@ -68,7 +78,15 @@ const BookingForm = () => {
                 <Typography component="h3">Number Of Passengers</Typography>
 
                 <Typography component="p">Need to check stock</Typography>
-                <BookingButtons />
+                <BookingButtons
+                  valueToShow={numberOfPassangers}
+                  handleDecrement={() =>
+                    setNumberOfPassangers(numberOfPassangers - 1)
+                  }
+                  handleIncrement={() =>
+                    setNumberOfPassangers(numberOfPassangers + 1)
+                  }
+                />
               </Grid>
               <Grid>
                 <Typography component="p">Whant more luggage?</Typography>
@@ -85,21 +103,21 @@ const BookingForm = () => {
                         Luggage Option 10kg
                       </Typography>
                     </div>
-                    <BookingButtons />
+                    {/* <BookingButtons handlePas={handlePas} /> */}
                   </Grid>
                   <Grid
-                  // container
-                  // direction="column"
-                  // alignItems="center"
-                  // spacing={2}
-                  // justifyContent="space-between"
+                    container
+                    direction="column"
+                    alignItems="center"
+                    spacing={2}
+                    justifyContent="space-between"
                   >
                     <div className={classes.luggageOptions}>
                       <Typography className={classes.luggageText}>
                         Luggage Option 20kg
                       </Typography>
                     </div>
-                    <BookingButtons />
+                    {/* <BookingButtons /> */}
                   </Grid>
                   <Grid
                     container
@@ -113,7 +131,7 @@ const BookingForm = () => {
                         Luggage Option 30kg
                       </Typography>
                     </div>
-                    <BookingButtons />
+                    {/* <BookingButtons /> */}
                   </Grid>
                 </Grid>
               </Grid>
