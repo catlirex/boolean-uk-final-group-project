@@ -46,6 +46,12 @@ const useStyles = makeStyles((theme) => ({
     marginTop: "30px",
     gridGap: theme.spacing(8),
   },
+  priceWrapper: {
+    display: "grid",
+    alignItems: "center",
+    marginTop: "30px",
+    gridGap: theme.spacing(8),
+  },
 }));
 
 const BookingForm = () => {
@@ -53,44 +59,123 @@ const BookingForm = () => {
   const [numberOf10KgLuggage, setNumberOf10KgLuggage] = useState(0);
   const [numberOf20KgLuggage, setNumberOf20KgLuggage] = useState(0);
   const [numberOf30KgLuggage, setNumberOf30KgLuggage] = useState(0);
+  let [totalPrice, setTotalPrice] = useState(0);
 
-  console.log("num of passengers", numberOfPassangers);
-  console.log("num of 10kg Luggage", numberOf10KgLuggage);
-  console.log("num of 20kg Luggage", numberOf20KgLuggage);
-  console.log("num of 30kg Luggage", numberOf30KgLuggage);
+  const outboundBooking = useStore((state) => state.outboundBooking);
+  const inboundBooking = useStore((state) => state.inboundBooking);
+  const loggedInUser = useStore((state) => state.loggedInUser);
 
-  // luggage 10kg
-  const ExtraLuggage10kg = () => {
+  console.log("Outbound booking", outboundBooking);
+  console.log("user", loggedInUser);
+
+  // // luggage 10kg
+  // const ExtraLuggage10kg = () => {
+  //   let num = null;
+  //   if (numberOf10KgLuggage !== 0) {
+  //     num = numberOf10KgLuggage;
+  //   }
+  //   const tenKgExtraLuggage = {
+  //     quantity: num,
+  //   };
+  //   return tenKgExtraLuggage;
+  // };
+
+  // // luggage 20kg
+  // const ExtraLuggage20kg = () => {
+  //   let num = null;
+  //   if (numberOf20KgLuggage !== 0) {
+  //     num = numberOf20KgLuggage;
+  //   }
+  //   const twentyKgExtraLuggage = {
+  //     quantity: num,
+  //   };
+  //   return twentyKgExtraLuggage;
+  // };
+
+  const ExtraLuggage = () => {
     let num = null;
-    if (numberOf10KgLuggage !== 0) {
-      num = numberOf10KgLuggage;
+    if (numberOf30KgLuggage !== 0) {
+      num = numberOf30KgLuggage;
+
+      let thirtyExtraLuggage = {
+        quantity: num,
+      };
+      return thirtyExtraLuggage;
     }
-    const tenKgExtraLuggage = {
-      quantity: num,
-    };
-    return tenKgExtraLuggage;
-  };
-
-  // luggage 20kg
-  const ExtraLuggage20kg = () => {
-    let num = null;
     if (numberOf20KgLuggage !== 0) {
       num = numberOf20KgLuggage;
-    }
-    const twentyKgExtraLuggage = {
-      quantity: num,
-    };
-    return twentyKgExtraLuggage;
-  };
-  console.log("10KG luggage", ExtraLuggage10kg());
+      const twentyKgExtraLuggage = {
+        quantity: num,
+      };
 
-  console.log("20KG luggage", ExtraLuggage20kg());
+      return { twentyKgExtraLuggage };
+    }
+
+    if (numberOf10KgLuggage !== 0) {
+      num = numberOf10KgLuggage;
+
+      const tenKgExtraLuggage = {
+        quantity: num,
+      };
+      return tenKgExtraLuggage;
+    }
+  };
+
+  // console.log(ExtraLuggage());
+
+  // console.log("20KG luggage", numberOf20KgLuggage);
+  // console.log("30KG luggage", numberOf30KgLuggage);
+  // console.log("price", totalPrice);
+
+  type Bookings = {
+    userId: number | undefined;
+    bookExtraLuggage: {
+      quantity: number;
+      extraLuggageId: number;
+    }[];
+    tickets: {
+      class: string;
+      scheduledFlightId: number;
+    }[];
+  };
+  const handleSubmit = () => {
+    const booking: Bookings = {
+      userId: loggedInUser?.id,
+      bookExtraLuggage: [],
+      tickets: [
+        { class: "econ", scheduledFlightId: 123 },
+        { class: "econ", scheduledFlightId: 123 },
+        { class: "econ", scheduledFlightId: 123 },
+      ],
+    };
+
+    if (numberOf10KgLuggage) {
+      booking.bookExtraLuggage.push({
+        quantity: numberOf10KgLuggage,
+        extraLuggageId: 1,
+      });
+    }
+    if (numberOf20KgLuggage) {
+      booking.bookExtraLuggage.push({
+        quantity: numberOf20KgLuggage,
+        extraLuggageId: 2,
+      });
+    }
+    if (numberOf30KgLuggage) {
+      booking.bookExtraLuggage.push({
+        quantity: numberOf30KgLuggage,
+        extraLuggageId: 3,
+      });
+    }
+  };
+
+  console.log(handleSubmit());
   const classes = useStyles();
   return (
     <Container component="main" maxWidth="sm">
       <CssBaseline />
       <div className={classes.main}>
-        <form className={classes.form}>
+        <form onSubmit={handleSubmit} className={classes.form}>
           <Grid container spacing={2}>
             <Grid item xs={12}>
               <Grid
@@ -129,12 +214,18 @@ const BookingForm = () => {
                     </div>
                     <BookingButtons
                       valueToShow={numberOf10KgLuggage}
-                      handleDecrement={() =>
-                        setNumberOf10KgLuggage(numberOf10KgLuggage - 1)
-                      }
-                      handleIncrement={() =>
-                        setNumberOf10KgLuggage(numberOf10KgLuggage + 1)
-                      }
+                      handleDecrement={() => {
+                        setNumberOf10KgLuggage(numberOf10KgLuggage - 1);
+                        if (totalPrice !== 0) {
+                          setTotalPrice(totalPrice - 20);
+                        }
+                        ExtraLuggage();
+                      }}
+                      handleIncrement={() => {
+                        setNumberOf10KgLuggage(numberOf10KgLuggage + 1);
+                        setTotalPrice(totalPrice + 20);
+                        ExtraLuggage();
+                      }}
                     />
                   </Grid>
                   <Grid
@@ -151,12 +242,18 @@ const BookingForm = () => {
                     </div>
                     <BookingButtons
                       valueToShow={numberOf20KgLuggage}
-                      handleDecrement={() =>
-                        setNumberOf20KgLuggage(numberOf20KgLuggage - 1)
-                      }
-                      handleIncrement={() =>
-                        setNumberOf20KgLuggage(numberOf20KgLuggage + 1)
-                      }
+                      handleDecrement={() => {
+                        setNumberOf20KgLuggage(numberOf20KgLuggage - 1);
+                        if (totalPrice !== 0) {
+                          setTotalPrice(totalPrice - 30);
+                        }
+                        ExtraLuggage();
+                      }}
+                      handleIncrement={() => {
+                        setNumberOf20KgLuggage(numberOf20KgLuggage + 1);
+                        setTotalPrice(totalPrice + 30);
+                        ExtraLuggage();
+                      }}
                     />
                   </Grid>
                   <Grid
@@ -173,12 +270,19 @@ const BookingForm = () => {
                     </div>
                     <BookingButtons
                       valueToShow={numberOf30KgLuggage}
-                      handleDecrement={() =>
-                        setNumberOf30KgLuggage(numberOf30KgLuggage - 1)
-                      }
-                      handleIncrement={() =>
-                        setNumberOf30KgLuggage(numberOf30KgLuggage + 1)
-                      }
+                      handleDecrement={() => {
+                        setNumberOf30KgLuggage(numberOf30KgLuggage - 1);
+                        if (totalPrice !== 0) {
+                          setTotalPrice(totalPrice - 50);
+                        }
+                        ExtraLuggage();
+                        ExtraLuggageObject();
+                      }}
+                      handleIncrement={() => {
+                        setNumberOf30KgLuggage(numberOf30KgLuggage + 1);
+                        setTotalPrice(totalPrice + 50);
+                        ExtraLuggage();
+                      }}
                     />
                   </Grid>
                 </Grid>
@@ -187,6 +291,11 @@ const BookingForm = () => {
           </Grid>
         </form>
       </div>
+      <Grid className={classes.priceWrapper}>
+        <Grid>
+          <Typography>Total Price ${totalPrice.toFixed(2)}</Typography>
+        </Grid>
+      </Grid>
     </Container>
   );
 };
