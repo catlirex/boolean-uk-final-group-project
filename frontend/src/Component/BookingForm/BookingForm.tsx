@@ -54,13 +54,10 @@ const BookingForm = () => {
   const [numberOf20KgLuggage, setNumberOf20KgLuggage] = useState(0);
   const [numberOf30KgLuggage, setNumberOf30KgLuggage] = useState(0);
 
-  // const handlePas = () => {
-  //   const newCount = numberOf10KgLuggage + 1;
-
-  //   setNumberOf10KgLuggage(newCount);
-  // };
   console.log("num of passengers", numberOfPassangers);
   console.log("num of 10kg Luggage", numberOf10KgLuggage);
+  console.log("num of 20kg Luggage", numberOf20KgLuggage);
+  console.log("num of 30kg Luggage", numberOf30KgLuggage);
   const classes = useStyles();
   return (
     <Container component="main" maxWidth="sm">
@@ -103,7 +100,15 @@ const BookingForm = () => {
                         Luggage Option 10kg
                       </Typography>
                     </div>
-                    {/* <BookingButtons handlePas={handlePas} /> */}
+                    <BookingButtons
+                      valueToShow={numberOf10KgLuggage}
+                      handleDecrement={() =>
+                        setNumberOf10KgLuggage(numberOf10KgLuggage - 1)
+                      }
+                      handleIncrement={() =>
+                        setNumberOf10KgLuggage(numberOf10KgLuggage + 1)
+                      }
+                    />
                   </Grid>
                   <Grid
                     container
@@ -117,7 +122,15 @@ const BookingForm = () => {
                         Luggage Option 20kg
                       </Typography>
                     </div>
-                    {/* <BookingButtons /> */}
+                    <BookingButtons
+                      valueToShow={numberOf20KgLuggage}
+                      handleDecrement={() =>
+                        setNumberOf20KgLuggage(numberOf20KgLuggage - 1)
+                      }
+                      handleIncrement={() =>
+                        setNumberOf20KgLuggage(numberOf20KgLuggage + 1)
+                      }
+                    />
                   </Grid>
                   <Grid
                     container
