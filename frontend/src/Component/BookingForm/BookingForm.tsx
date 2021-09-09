@@ -58,6 +58,33 @@ const BookingForm = () => {
   console.log("num of 10kg Luggage", numberOf10KgLuggage);
   console.log("num of 20kg Luggage", numberOf20KgLuggage);
   console.log("num of 30kg Luggage", numberOf30KgLuggage);
+
+  // luggage 10kg
+  const ExtraLuggage10kg = () => {
+    let num = null;
+    if (numberOf10KgLuggage !== 0) {
+      num = numberOf10KgLuggage;
+    }
+    const tenKgExtraLuggage = {
+      quantity: num,
+    };
+    return tenKgExtraLuggage;
+  };
+
+  // luggage 20kg
+  const ExtraLuggage20kg = () => {
+    let num = null;
+    if (numberOf20KgLuggage !== 0) {
+      num = numberOf20KgLuggage;
+    }
+    const twentyKgExtraLuggage = {
+      quantity: num,
+    };
+    return twentyKgExtraLuggage;
+  };
+  console.log("10KG luggage", ExtraLuggage10kg());
+
+  console.log("20KG luggage", ExtraLuggage20kg());
   const classes = useStyles();
   return (
     <Container component="main" maxWidth="sm">
