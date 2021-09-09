@@ -144,7 +144,15 @@ const BookingForm = () => {
                         Luggage Option 30kg
                       </Typography>
                     </div>
-                    {/* <BookingButtons /> */}
+                    <BookingButtons
+                      valueToShow={numberOf30KgLuggage}
+                      handleDecrement={() =>
+                        setNumberOf30KgLuggage(numberOf30KgLuggage - 1)
+                      }
+                      handleIncrement={() =>
+                        setNumberOf30KgLuggage(numberOf30KgLuggage + 1)
+                      }
+                    />
                   </Grid>
                 </Grid>
               </Grid>
