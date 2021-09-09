@@ -4,6 +4,7 @@ import styled from "styled-components";
 import Button from "@material-ui/core/Button";
 import { withStyles } from "@material-ui/core/styles";
 import { APP_COLOR } from "../../consistent";
+import { useHistory } from "react-router";
 
 type Props = {
   booking: UserBookingType;
@@ -14,8 +15,8 @@ const StyledLi = styled.li`
   box-shadow: 0 0 10px 0;
   border-radius: 10px;
   padding: 10px;
-  span {
-    color: ${APP_COLOR.grey};
+  button span {
+    color: ${APP_COLOR.white};
   }
   p {
     font-weight: 600;
@@ -52,6 +53,20 @@ export const PinkButton = withStyles(() => ({
     WebkitBorderRadius: "10px",
     margin: "0",
     marginLeft: "5px",
+    backgroundColor: APP_COLOR.pink,
+
+    "&:hover": {
+      backgroundColor: APP_COLOR.lightPink,
+    },
+  },
+}))(Button);
+
+export const GreyButton = withStyles(() => ({
+  root: {
+    height: "50px",
+    WebkitBorderRadius: "10px",
+    margin: "0",
+    marginLeft: "5px",
     backgroundColor: APP_COLOR.lightGrey,
 
     "&:hover": {
@@ -62,8 +77,9 @@ export const PinkButton = withStyles(() => ({
 
 export default function BookingCard({ booking }: Props) {
   const { status, scheduledFlight } = booking.tickets[0];
+  if (!scheduledFlight) return null;
   const { date, flightNumberId, flightNumber, time } = scheduledFlight;
-
+  const history = useHistory();
   const dateStringArray = date.toString().split("");
   dateStringArray?.splice(4, 0, "-");
   dateStringArray?.splice(7, 0, "-");
@@ -95,7 +111,17 @@ export default function BookingCard({ booking }: Props) {
 
       <p className="status">Flight Status: {scheduledFlight.status}</p>
 
-      <PinkButton>{status}</PinkButton>
+      {status === "ONLINECHECKIN" ? (
+        <PinkButton>View Boarding Pass</PinkButton>
+      ) : scheduledFlight.status === "CHECKIN" ? (
+        <PinkButton
+          onClick={() => history.push(`/onlineCheckIn/${booking.id}`)}
+        >
+          Go CheckIn
+        </PinkButton>
+      ) : (
+        <GreyButton disabled>{status}</GreyButton>
+      )}
     </StyledLi>
   );
 }
