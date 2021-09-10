@@ -12,7 +12,6 @@ export default function BookingFormPage() {
 
   return (
     <div>
-      <h1>booking form</h1>;
       <BookingForm />
     </div>
   );

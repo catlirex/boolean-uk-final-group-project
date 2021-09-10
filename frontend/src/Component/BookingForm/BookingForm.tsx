@@ -1,24 +1,22 @@
-import React, { useState, SyntheticEvent, useEffect } from "react";
+import React, { useState, useEffect } from "react";
 import useStore from "../../store";
-import LockOutlinedIcon from "@material-ui/icons/LockOutlined";
+import { useHistory } from "react-router";
 import Typography from "@material-ui/core/Typography";
-import { makeStyles } from "@material-ui/core/styles";
+import { makeStyles, withStyles } from "@material-ui/core/styles";
 import Container from "@material-ui/core/Container";
 import Button from "@material-ui/core/Button";
-import ButtonGroup from "@material-ui/core/ButtonGroup";
 import CssBaseline from "@material-ui/core/CssBaseline";
-import TextField from "@material-ui/core/TextField";
-import FormControlLabel from "@material-ui/core/FormControlLabel";
-import Checkbox from "@material-ui/core/Checkbox";
-import Link from "@material-ui/core/Link";
 import Grid from "@material-ui/core/Grid";
 import BookingButtons from "./BookingButtons";
 import { APP_COLOR } from "../../consistent";
-import { Fireplace, FormatListNumberedRtl } from "@material-ui/icons";
 
 const useStyles = makeStyles((theme) => ({
   main: {
     marginTop: theme.spacing(10),
+  },
+  mainHeader: {
+    margin: "20px",
+    textAlign: "center",
   },
   form: {},
   passengersNum: {
@@ -54,6 +52,21 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
+const SquareButton = withStyles(() => ({
+  root: {
+    height: "auto",
+    width: "15vw",
+    fontSize: "0.8rem",
+    color: APP_COLOR.white,
+    backgroundColor: APP_COLOR.sharpPick,
+    boxShadow: `0 0 5px 0 ${APP_COLOR.lightGrey}`,
+    placeSelf: "center",
+    "&:hover": {
+      backgroundColor: APP_COLOR.pink,
+    },
+  },
+}))(Button);
+
 type Bookings = {
   userId: number | undefined;
   bookExtraLuggage: {
@@ -67,6 +80,8 @@ type Bookings = {
 };
 
 const BookingForm = () => {
+  const classes = useStyles();
+  const history = useHistory();
   const [numberOfPassangers, setNumberOfPassangers] = useState(0);
   const [numberOf10KgLuggage, setNumberOf10KgLuggage] = useState(0);
   const [numberOf20KgLuggage, setNumberOf20KgLuggage] = useState(0);
@@ -76,6 +91,7 @@ const BookingForm = () => {
   const outboundBooking = useStore((state) => state.outboundBooking);
   const inboundBooking = useStore((state) => state.inboundBooking);
   const loggedInUser = useStore((state) => state.loggedInUser);
+
   console.log("inbound booking", inboundBooking);
   const ExtraLuggage = () => {
     let num = null;
@@ -174,16 +190,16 @@ const BookingForm = () => {
 
     if (numberOfPassangers !== 0) {
       for (let i = 0; i < numberOfPassangers; i++) {
-        // inbooking.tickets.push(inboundBooking?.tickets[0]);
+        inbooking.tickets.push(inboundBooking?.tickets[0]);
       }
     }
   };
 
   console.log(handleSubmit());
 
-  const classes = useStyles();
   return (
     <Container component="main" maxWidth="sm">
+      <h1 className={classes.mainHeader}>Booking Form</h1>
       <CssBaseline />
       <div className={classes.main}>
         <form onSubmit={handleSubmit} className={classes.form}>
@@ -305,6 +321,12 @@ const BookingForm = () => {
         <Grid>
           <Typography>Total Price ${totalPrice.toFixed(2)}</Typography>
         </Grid>
+        <SquareButton
+          variant="contained"
+          onClick={() => history.push("/myBooking")}
+        >
+          PayMent
+        </SquareButton>
       </Grid>
     </Container>
   );
