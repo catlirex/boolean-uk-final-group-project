@@ -54,6 +54,18 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
+type Bookings = {
+  userId: number | undefined;
+  bookExtraLuggage: {
+    quantity: number;
+    extraLuggageId: number;
+  }[];
+  tickets: {
+    class: string;
+    scheduledFlightId: number;
+  }[];
+};
+
 const BookingForm = () => {
   const [numberOfPassangers, setNumberOfPassangers] = useState(0);
   const [numberOf10KgLuggage, setNumberOf10KgLuggage] = useState(0);
@@ -64,33 +76,6 @@ const BookingForm = () => {
   const outboundBooking = useStore((state) => state.outboundBooking);
   const inboundBooking = useStore((state) => state.inboundBooking);
   const loggedInUser = useStore((state) => state.loggedInUser);
-
-  console.log("Outbound booking", outboundBooking);
-  console.log("user", loggedInUser);
-
-  // // luggage 10kg
-  // const ExtraLuggage10kg = () => {
-  //   let num = null;
-  //   if (numberOf10KgLuggage !== 0) {
-  //     num = numberOf10KgLuggage;
-  //   }
-  //   const tenKgExtraLuggage = {
-  //     quantity: num,
-  //   };
-  //   return tenKgExtraLuggage;
-  // };
-
-  // // luggage 20kg
-  // const ExtraLuggage20kg = () => {
-  //   let num = null;
-  //   if (numberOf20KgLuggage !== 0) {
-  //     num = numberOf20KgLuggage;
-  //   }
-  //   const twentyKgExtraLuggage = {
-  //     quantity: num,
-  //   };
-  //   return twentyKgExtraLuggage;
-  // };
 
   const ExtraLuggage = () => {
     let num = null;
@@ -121,25 +106,10 @@ const BookingForm = () => {
     }
   };
 
-  // console.log(ExtraLuggage());
-
-  // console.log("20KG luggage", numberOf20KgLuggage);
-  // console.log("30KG luggage", numberOf30KgLuggage);
-  // console.log("price", totalPrice);
-
-  type Bookings = {
-    userId: number | undefined;
-    bookExtraLuggage: {
-      quantity: number;
-      extraLuggageId: number;
-    }[];
-    tickets: {
-      class: string;
-      scheduledFlightId: number;
-    }[];
-  };
   const handleSubmit = () => {
-    const booking: Bookings = {
+    // OutBound Bookings
+    // if (outboundBooking?.tickets || outboundBooking?.bookExtraLuggage) {
+    const outbooking: Bookings = {
       userId: loggedInUser?.id,
       bookExtraLuggage: [],
       tickets: [
@@ -150,26 +120,71 @@ const BookingForm = () => {
     };
 
     if (numberOf10KgLuggage) {
-      booking.bookExtraLuggage.push({
+      outbooking.bookExtraLuggage.push({
         quantity: numberOf10KgLuggage,
         extraLuggageId: 1,
       });
     }
     if (numberOf20KgLuggage) {
-      booking.bookExtraLuggage.push({
+      outbooking.bookExtraLuggage.push({
         quantity: numberOf20KgLuggage,
         extraLuggageId: 2,
       });
     }
     if (numberOf30KgLuggage) {
-      booking.bookExtraLuggage.push({
+      outbooking.bookExtraLuggage.push({
         quantity: numberOf30KgLuggage,
         extraLuggageId: 3,
       });
     }
+    console.log("Outbound", outbooking);
+    // }
+    // Inbound Bookings
+    // if (inboundBooking?.bookExtraLuggage || inboundBooking?.tickets) {
+    const inbooking: Bookings = {
+      userId: loggedInUser?.id,
+      bookExtraLuggage: [],
+      tickets: [
+        { class: "econ", scheduledFlightId: 123 },
+        { class: "econ", scheduledFlightId: 123 },
+        { class: "econ", scheduledFlightId: 123 },
+      ],
+    };
+
+    if (numberOf10KgLuggage) {
+      inbooking.bookExtraLuggage.push({
+        quantity: numberOf10KgLuggage,
+        extraLuggageId: 1,
+      });
+    }
+    if (numberOf20KgLuggage) {
+      inbooking.bookExtraLuggage.push({
+        quantity: numberOf20KgLuggage,
+        extraLuggageId: 2,
+      });
+    }
+    if (numberOf30KgLuggage) {
+      inbooking.bookExtraLuggage.push({
+        quantity: numberOf30KgLuggage,
+        extraLuggageId: 3,
+      });
+    }
+    console.log("Inbound", inbooking);
+    // }
+
+    // if (numberOfPassangers !== 0) {
+    //   for (let i = 0; i < numberOfPassangers; i++) {
+    //     inbooking.tickets.push({
+    //       // class: ,
+    //       // scheduledFlightId:
+    //       //   inboundBooking?.tickets.TicketType.scheduledFlightId,
+    //     });
+    //   }
+    // }
   };
 
   console.log(handleSubmit());
+
   const classes = useStyles();
   return (
     <Container component="main" maxWidth="sm">
@@ -276,7 +291,6 @@ const BookingForm = () => {
                           setTotalPrice(totalPrice - 50);
                         }
                         ExtraLuggage();
-                        ExtraLuggageObject();
                       }}
                       handleIncrement={() => {
                         setNumberOf30KgLuggage(numberOf30KgLuggage + 1);
