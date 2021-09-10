@@ -5,6 +5,7 @@ import LogInModal from "./LogInModal";
 import SignUpModal from "./SignUpModal";
 import LoginErrorModal from "./LoginErrorModal";
 import FlightBookingError from "./FlightBookingError";
+import ConfirmRemoveAccount from "./ConfirmRemoveAccount";
 // const useStyles = makeStyles((theme) => ({
 //   modal: {
 //     border: theme(2),
@@ -47,6 +48,7 @@ function ModalContainer() {
         {modal === "signUp" ? <SignUpModal /> : null}
         {modal === "loginError" ? <LoginErrorModal /> : null}
         {modal === "selectFlight" ? <FlightBookingError /> : null}
+        {modal === "removeAccount" ? <ConfirmRemoveAccount /> : null}
       </div>
     </StyledContainer>
   );

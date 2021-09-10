@@ -40,14 +40,14 @@ export type FlightStatusType = {
   time: string;
 };
 
-type TicketType = {
+export type TicketType = {
   bookingId?: number;
   class: "econ" | "first" | "business";
   id?: number;
   passengerFirstName?: null | string;
   passengerLastName?: null | string;
   passpostNumber?: null | string;
-  scheduledFlight?: FlightStatusType;
+  scheduledFlight?: ScheduledFlightList;
   scheduledFlightId: number;
   seatNumer?: null | string;
   specialMeal?: null | string;
@@ -124,7 +124,7 @@ type StoreType = {
   airportList: AirportType[] | null;
   setAirportList: () => void;
 
-  loggedInUser: null | userCredentials;
+  loggedInUser: null | userCredentials | { id: number };
   setLoginUser: (loggedInUser: userCredentials) => void;
   userCredentials: {};
   setUserCredentials: (userCredentials: {}) => void;
@@ -205,7 +205,7 @@ const useStore = create<StoreType>((set, get) => ({
     password: null,
   },
   setUserCredentials: (userCredentials) => set({ userCredentials }),
-  loggedInUser: null,
+  loggedInUser: { id: 30 },
   setLoginUser: async (userCredentials) => {
     const loginUser = await fetch(`http://localhost:3000/login`, {
       method: "POST",
@@ -250,6 +250,9 @@ const useStore = create<StoreType>((set, get) => ({
   logOut: () => {
     set({
       loggedInUser: null,
+      flightSearch: null,
+      flightSearchNoDate: null,
+      outboundBooking: null,
     });
   },
   flightStatus: null,

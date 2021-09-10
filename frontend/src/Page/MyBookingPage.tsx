@@ -3,15 +3,40 @@ import { useEffect } from "react";
 import styled from "styled-components";
 import useStore from "../store";
 import BookingCard from "../Component/MyBooking/BookingCard";
+import { withStyles } from "@material-ui/core/styles";
+import Button from "@material-ui/core/Button";
+import { APP_COLOR } from "../consistent";
+
+const SquareButton = withStyles(() => ({
+  root: {
+    height: "auto",
+    width: "15vw",
+    fontSize: "0.8rem",
+    color: APP_COLOR.white,
+    backgroundColor: APP_COLOR.sharpPick,
+    boxShadow: `0 0 5px 0 ${APP_COLOR.lightGrey}`,
+    placeSelf: "center",
+    "&:hover": {
+      backgroundColor: APP_COLOR.pink,
+    },
+  },
+}))(Button);
 
 const StyledMain = styled.main`
   padding: 20px 50px;
 `;
 const StyledUl = styled.ul`
   display: grid;
-  grid-auto-flow: column;
+  grid-template-columns: repeat(3, 1fr);
   padding: 20px 0;
   gap: 20px;
+
+  @media screen and (max-width: 700px) {
+    grid-template-columns: repeat(2, 1fr);
+  }
+  @media screen and (max-width: 480px) {
+    grid-template-columns: repeat(1, 1fr);
+  }
 `;
 
 export default function MyBookingPage() {
@@ -37,6 +62,9 @@ export default function MyBookingPage() {
             ))
           : null}
       </StyledUl>
+      <SquareButton onClick={() => setModal("removeAccount")}>
+        Remove Account
+      </SquareButton>
     </StyledMain>
   );
 }
