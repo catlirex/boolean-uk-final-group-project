@@ -9,7 +9,7 @@ import WorkIcon from "@material-ui/icons/Work";
 import FastfoodIcon from "@material-ui/icons/Fastfood";
 import DoneOutlineIcon from "@material-ui/icons/DoneOutline";
 import LocalOfferIcon from "@material-ui/icons/LocalOffer";
-
+// this is mock mock
 type Props = {
   data: FlightSearchTypeOne;
 };
