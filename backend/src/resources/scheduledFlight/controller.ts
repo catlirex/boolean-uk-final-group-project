@@ -158,7 +158,7 @@ export const getScheduledFlightsByDateDepartureArrival = async (
           },
         },
         include: {
-          flightNumber: true,
+          flightNumber: { include: { airline: true } },
         },
       });
       res.json({ data: result });

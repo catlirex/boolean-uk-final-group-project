@@ -204,16 +204,22 @@ const SearchBarComponent = () => {
 
     const depart = target.depart.value;
     const arrival = target.arrival.value;
-    const dateString = departureDate
+    const dateStringArrival = arrivalDate
       ?.toISOString()
       .split("T")[0]
       .split("-")
       .join("");
-    if (dateString) {
-      const dateNum = parseInt(dateString);
-      console.log(dateNum, depart, arrival);
+    const dateStringDeparture = departureDate
+      ?.toISOString()
+      .split("T")[0]
+      .split("-")
+      .join("");
+    if (dateStringDeparture && dateStringArrival) {
+      const dateNumDeparture = parseInt(dateStringDeparture);
+      const dateNumArrival = parseInt(dateStringArrival);
+      console.log(dateNumDeparture, dateNumArrival, depart, arrival);
 
-      searchFlightSeach(depart, arrival, dateNum);
+      searchFlightSeach(depart, arrival, dateNumDeparture, dateNumArrival);
       history.push("/searchResult");
     }
     target.reset();

@@ -65,7 +65,7 @@ export default function DepartSearchResult() {
       </StyledSection>
     );
 
-  if (flightSearch && departAirport)
+  if (flightSearch?.length && departAirport)
     return (
       <StyledSection>
         <div className="img-container">

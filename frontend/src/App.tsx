@@ -8,14 +8,16 @@ import SearchBarComponent from "./Component/SearchBar/SearchBar";
 import ModalContainer from "./modals/ModalContainer";
 import NoLoginHeader from "./Component/noLoginHeader";
 import FlightStatusPage from "./Page/FlightStatusPage";
-
 import StaffHomePage from "./Page/StaffHomePage";
-
 import MyBookingPage from "./Page/MyBookingPage";
 import SearchResultPage from "./Page/SearchResultPage";
 import BookingFormPage from "./Page/BookingFormPage";
+
 import DepartureStaff from "./Component/DepartureStaff";
 import { FormatListNumberedRtl } from "@material-ui/icons";
+
+import OnlineCheckInPage from "./Page/OnlineCheckInPage";
+
 
 function App() {
   const airportList = useStore((state) => state.airportList);
@@ -58,6 +60,11 @@ function App() {
         <Route path="/bookingForm" exact>
           {loggedInUser ? <LoginHeader /> : <NoLoginHeader />}
           <BookingFormPage />
+        </Route>
+
+        <Route path="/onlineCheckIn/:id">
+          {loggedInUser ? <LoginHeader /> : <NoLoginHeader />}
+          <OnlineCheckInPage />
         </Route>
 
         <Route>

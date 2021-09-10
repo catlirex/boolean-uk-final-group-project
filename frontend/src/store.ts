@@ -30,14 +30,14 @@ export type FlightStatusType = {
   time: string;
 };
 
-type TicketType = {
+export type TicketType = {
   bookingId?: number;
   class: "econ" | "first" | "business";
   id?: number;
   passengerFirstName?: null | string;
   passengerLastName?: null | string;
   passpostNumber?: null | string;
-  scheduledFlight?: FlightStatusType;
+  scheduledFlight?: ScheduledFlightList;
   scheduledFlightId: number;
   seatNumer?: null | string;
   specialMeal?: null | string;
@@ -126,7 +126,7 @@ type StoreType = {
   airportList: AirportType[] | null;
   setAirportList: () => void;
 
-  loggedInUser: null | userCredentials;
+  loggedInUser: null | userCredentials | { id: number };
   setLoginUser: (loggedInUser: userCredentials) => void;
   userCredentials: {};
   setUserCredentials: (userCredentials: {}) => void;
@@ -160,11 +160,19 @@ type StoreType = {
 
   flightSearch: null | undefined | FlightSearchTypeOne[];
   flightSearchNoDate: null | undefined | FlightSearchTypeOne[];
+  arrivalFlightSearch: null | undefined | FlightSearchTypeOne[];
+  arrivalFlightSearchNoDate: null | undefined | FlightSearchTypeOne[];
   resetSearch: () => void;
-  searchFlightSeach: (depart: string, arrival: string, date?: number) => void;
+  searchFlightSeach: (
+    depart: string,
+    arrival: string,
+    dateDepart?: number,
+    deteArrival?: number
+  ) => void;
   outboundBooking: null | newBookingType;
   inboundBooking: null | newBookingType;
   selectOutboundFlight: (arg: TicketType) => void;
+  selectInboundFlight: (arg: TicketType) => void;
 };
 
 export type User = {
@@ -212,7 +220,7 @@ const useStore = create<StoreType>((set, get) => ({
     password: null,
   },
   setUserCredentials: (userCredentials) => set({ userCredentials }),
-  loggedInUser: null,
+  loggedInUser: { id: 30 },
   setLoginUser: async (userCredentials) => {
     const loginUser = await fetch(`http://localhost:3000/login`, {
       method: "POST",
@@ -257,6 +265,9 @@ const useStore = create<StoreType>((set, get) => ({
   logOut: () => {
     set({
       loggedInUser: null,
+      flightSearch: null,
+      flightSearchNoDate: null,
+      outboundBooking: null,
     });
   },
 
@@ -332,6 +343,8 @@ const useStore = create<StoreType>((set, get) => ({
   //FLIGHTSEARCH
   flightSearch: null,
   flightSearchNoDate: null,
+  arrivalFlightSearch: null,
+  arrivalFlightSearchNoDate: null,
   resetSearch: () => {
     set({
       flightSearch: null,
@@ -339,24 +352,72 @@ const useStore = create<StoreType>((set, get) => ({
       outboundBooking: null,
     });
   },
-  searchFlightSeach: async (depart, arrival, date) => {
-    if (date && depart && arrival) {
-      const flightSearchFromServer = await fetch(
-        `http://localhost:3000/scheduledFlight/?date=${date}&depart=${depart}&arrival=${arrival}`
+  searchFlightSeach: async (depart, arrival, dateDepart, dateArrival) => {
+    if (dateDepart && dateArrival && depart && arrival) {
+      const departureFlightSearchFromServer = await fetch(
+        `http://localhost:3000/scheduledFlight/?date=${dateDepart}&depart=${depart}&arrival=${arrival}`
       ).then((res) => res.json());
-      console.log(flightSearchFromServer);
+      console.log("Depart with date", departureFlightSearchFromServer);
 
-      if (flightSearchFromServer.data.length)
-        set({ flightSearch: flightSearchFromServer.data });
+      const arrivalFlightSearchFromServer = await fetch(
+        `http://localhost:3000/scheduledFlight/?date=${dateArrival}&arrival=${depart}&depart=${arrival}`
+      ).then((res) => res.json());
+      console.log("Arrival with date", arrivalFlightSearchFromServer);
+
+      if (departureFlightSearchFromServer.data.length)
+        set({
+          flightSearch: departureFlightSearchFromServer.data,
+        });
       else {
+        set({ flightSearchNoDate: undefined });
         const flightSearchFromServerWithoutDate = await fetch(
           `http://localhost:3000/scheduledFlight/?depart=${depart}&arrival=${arrival}`
         ).then((res) => res.json());
-        console.log(flightSearchFromServerWithoutDate);
+        console.log("depart with no date", flightSearchFromServerWithoutDate);
         if (flightSearchFromServerWithoutDate.data.length)
           set({ flightSearchNoDate: flightSearchFromServerWithoutDate.data });
         else set({ flightSearchNoDate: undefined });
       }
+
+      if (arrivalFlightSearchFromServer.data.length)
+        set({
+          arrivalFlightSearch: arrivalFlightSearchFromServer.data,
+        });
+      else {
+        set({ arrivalFlightSearchNoDate: undefined });
+        const arrivalFlightSearchFromServerWithoutDate = await fetch(
+          `http://localhost:3000/scheduledFlight/?depart=${arrival}&arrival=${depart}`
+        ).then((res) => res.json());
+        console.log(
+          "arrival with no date",
+          arrivalFlightSearchFromServerWithoutDate
+        );
+        if (arrivalFlightSearchFromServerWithoutDate.data.length)
+          set({
+            arrivalFlightSearchNoDate:
+              arrivalFlightSearchFromServerWithoutDate.data,
+          });
+        else set({ arrivalFlightSearchNoDate: undefined });
+      }
+      // if (
+      //   departureFlightSearchFromServer.data.length &&
+      //   arrivalFlightSearchFromServer.data.length
+      // ) {
+      //   console.log(arrivalFlightSearchFromServer.data);
+
+      //   set({
+      //     flightSearch: arrivalFlightSearchFromServer.data,
+      //   });
+      // } else {
+      //   set({ flightSearchNoDate: undefined });
+      //   const flightSearchFromServerWithoutDate = await fetch(
+      //     `http://localhost:3000/scheduledFlight/?depart=${depart}&arrival=${arrival}`
+      //   ).then((res) => res.json());
+      //   console.log(flightSearchFromServerWithoutDate);
+      //   if (flightSearchFromServerWithoutDate.data.length)
+      //     set({ flightSearchNoDate: flightSearchFromServerWithoutDate.data });
+      //   else set({ flightSearchNoDate: undefined });
+      // }
     }
   },
 
@@ -366,6 +427,9 @@ const useStore = create<StoreType>((set, get) => ({
     set({ outboundBooking: { tickets: [ticket] } });
   },
   inboundBooking: null,
+  selectInboundFlight: (ticket) => {
+    set({ inboundBooking: { tickets: [ticket] } });
+  },
 }));
 
 export default useStore;
