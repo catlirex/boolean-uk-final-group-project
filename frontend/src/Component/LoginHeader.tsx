@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect } from "react";
 import styled from "styled-components";
 import logo from "../assets/booleanAir_logo.png";
 import { APP_COLOR } from "../consistent";
@@ -72,7 +72,15 @@ export const PinkButton = withStyles(() => ({
 
 export default function LoginHeader() {
   const logOut = useStore((state) => state.logOut);
+  const loggedInUser = useStore((state) => state.loggedInUser);
   const history = useHistory();
+
+  useEffect(() => {
+    if (loggedInUser && loggedInUser.role === "STAFF") {
+      history.push("/staffpage");
+    }
+  }, []);
+
   return (
     <StyledHeader>
       <img className="app-logo" src={logo}></img>

@@ -1,25 +1,27 @@
-import React from "react";
+import React, { SyntheticEvent } from "react";
 import useStore from "../store";
 import styled from "styled-components";
 import { APP_COLOR } from "../consistent";
-import Button from "@material-ui/core/Button";
 import { withStyles } from "@material-ui/core/styles";
-
-const StyledList = styled.li`
-  margin: 10px;
-  padding: 10px;
-  overflow: auto;
-
-  display: grid;
-  grid-template-columns: repeat(3, 1fr);
-`;
+import ToggleButton from "@material-ui/lab/ToggleButton";
+import ToggleButtonGroup from "@material-ui/lab/ToggleButtonGroup";
 
 const StyledImg = styled.img`
   height: 100px;
   widhth: 120px;
 `;
 
-export const PinkButton = withStyles(() => ({
+export const MyToggleList = withStyles(() => ({
+  root: {
+    margin: "10px",
+    padding: "10px",
+    overflow: "scroll",
+    display: "grid",
+    gridTemplateColumns: "repeat(3, 1fr)",
+  },
+}))(ToggleButtonGroup);
+
+export const MyToggleButton = withStyles(() => ({
   root: {
     height: "50px",
     fontSize: "12px",
@@ -33,20 +35,33 @@ export const PinkButton = withStyles(() => ({
       backgroundColor: APP_COLOR.lightGrey,
     },
   },
-}))(Button);
+}))(ToggleButton);
 
 export default function AirportList() {
+  const chooseAirport = useStore((state) => state.chooseAirport);
+  const setChooseAirport = useStore((state) => state.setChooseAirport);
   const airportList = useStore((state) => state.airportList);
+
+  console.log("List", airportList);
+
+  const handleAirport = (e: SyntheticEvent, newAirport: string) => {
+    e.preventDefault();
+
+    setChooseAirport(newAirport);
+  };
+
+  console.log(chooseAirport);
+
   return (
-    <StyledList>
+    <MyToggleList value={chooseAirport} exclusive onChange={handleAirport}>
       {airportList?.map((airport) => {
         return (
-          <PinkButton>
+          <MyToggleButton value={airport.id}>
             <StyledImg src={airport.cityImage} alt="" />
             {airport.name}, {airport.id}, {airport.city}
-          </PinkButton>
+          </MyToggleButton>
         );
       })}
-    </StyledList>
+    </MyToggleList>
   );
 }

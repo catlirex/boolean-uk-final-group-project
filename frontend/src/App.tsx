@@ -12,12 +12,19 @@ import StaffHomePage from "./Page/StaffHomePage";
 import MyBookingPage from "./Page/MyBookingPage";
 import SearchResultPage from "./Page/SearchResultPage";
 import BookingFormPage from "./Page/BookingFormPage";
+
+import DepartureStaff from "./Component/DepartureStaff";
+import { FormatListNumberedRtl } from "@material-ui/icons";
+
 import OnlineCheckInPage from "./Page/OnlineCheckInPage";
+
 
 function App() {
   const airportList = useStore((state) => state.airportList);
   const setAirportList = useStore((state) => state.setAirportList);
   const loggedInUser = useStore((state) => state.loggedInUser);
+
+  // const id = passengersFlightList?.find( )
 
   useEffect(() => {
     setAirportList();

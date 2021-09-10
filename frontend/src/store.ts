@@ -17,16 +17,6 @@ type AirLineType = {
   name: string;
 };
 
-export type FlightNumberType = {
-  aircraftId: string;
-  airline: AirLineType;
-  airlineId: string;
-  arrivalAirportId: string;
-  departureAirportId: string;
-  durationHour: number;
-  id: string;
-};
-
 export type FlightStatusType = {
   businessPrice: number;
   date: number;
@@ -105,7 +95,19 @@ type newBookingType = {
   }[];
   tickets: TicketType[];
 };
+
+export type FlightNumberType = {
+  aircraftId: string;
+  airline: AirLineType;
+  airlineId: string;
+  arrivalAirportId: string;
+  departureAirportId: string;
+  durationHour: number;
+  id: string;
+};
+
 export type ScheduledFlightList = {
+  id: number;
   date: number;
   time: string;
   economicPrice: number;
@@ -137,10 +139,21 @@ type StoreType = {
   flightStatus: null | undefined | FlightStatusType;
   searchFlightStatus: (flightNumber: string, date: number) => void;
 
-  departureFlightList: ScheduledFlightList[];
-  setDepartureFlightList: (airportCode: string) => void;
-  selectedAirport: AirportType | null;
-  setSelectedAirport: (id: string) => void;
+  departureFlightList: ScheduledFlightList[] | null;
+  setDepartureFlightList: () => void;
+  arrivalFlightList: ScheduledFlightList[] | null;
+  setArrivalFlightList: () => void;
+  // selectedAirport: AirportType | null;
+  // setSelectedAirport: (id: string) => void;
+  chooseAirport?: AirportType["id"];
+  setChooseAirport: (airportId: string) => void;
+  staffFunction: string;
+  setStaffFunction: (funct: string) => void;
+  passengersFlightList: TicketType[] | null;
+  setPassengersFlightList: (id: number) => void;
+
+  bookingList: TicketType[] | null;
+  setBookingList: (id: number) => void;
 
   userBooking: null | UserBookingType[];
   getUserBooking: () => void;
@@ -185,8 +198,11 @@ export type signUpUserCredentials = {
 };
 
 const useStore = create<StoreType>((set, get) => ({
+  // MODALS
   modal: "",
   setModal: (modal) => set({ modal }),
+
+  //AIRPORTS
   airportList: null,
   setAirportList: async () => {
     const airportsFromServer = await fetch(
@@ -199,7 +215,6 @@ const useStore = create<StoreType>((set, get) => ({
   setSearchResult: () => {},
 
   // LOGIN STUFF
-
   userCredentials: {
     email: null,
     password: null,
@@ -255,6 +270,8 @@ const useStore = create<StoreType>((set, get) => ({
       outboundBooking: null,
     });
   },
+
+  //FLIGHTSTATUS
   flightStatus: null,
   searchFlightStatus: async (flightNumber, date) => {
     const flightStatusFromServer = await fetch(
@@ -266,21 +283,49 @@ const useStore = create<StoreType>((set, get) => ({
     else set({ flightStatus: undefined });
   },
 
-  selectedAirport: null,
-  setSelectedAirport: async (id) => {
-    const currentAirport = await fetch(
-      `http://localhost:3000/scheduledFlight/departure/${id}`
-    ).then((res) => res.json());
-    set({ selectedAirport: currentAirport });
+  // STAFFPAGE
+  staffFunction: "",
+  setStaffFunction: (funct: string) => {
+    set({ staffFunction: funct });
   },
-  departureFlightList: [],
-  setDepartureFlightList: async (airportCode) => {
+  chooseAirport: "",
+  setChooseAirport: (airportId) => {
+    set({ chooseAirport: airportId });
+  },
+  departureFlightList: null,
+  setDepartureFlightList: async () => {
     const scheduledFlightByDeparture = await fetch(
-      `http://localhost:3000/scheduledFlight/departure/${airportCode}`
+      `http://localhost:3000/scheduledFlight/departure/${get().chooseAirport}`
     ).then((res) => res.json());
-    set({ departureFlightList: scheduledFlightByDeparture });
+    set({ departureFlightList: scheduledFlightByDeparture.data });
   },
 
+  arrivalFlightList: null,
+  setArrivalFlightList: async () => {
+    const scheduledFlightByArrival = await fetch(
+      `http://localhost:3000/scheduledFlight/arrival/${get().chooseAirport}`
+    ).then((res) => res.json());
+    set({ arrivalFlightList: scheduledFlightByArrival.data });
+  },
+  passengersFlightList: null,
+  setPassengersFlightList: async (id: number) => {
+    const passengersFromServer = await fetch(
+      `http://localhost:3000/tickets?scheduledFlight=${id}`
+    ).then((res) => res.json());
+    set({ passengersFlightList: passengersFromServer.data });
+  },
+
+  // STAFFBOOKING
+
+  bookingList: null,
+  setBookingList: async (id: number) => {
+    const bookingsFromServer = await fetch(
+      `http://localhost:3000/bookings/${id}`
+    ).then((res) => res.json());
+    set({ bookingList: bookingsFromServer });
+  },
+
+  // USERBOOKING
   userBooking: null,
   getUserBooking: async () => {
     if (!get().loggedInUser) return;
@@ -294,6 +339,8 @@ const useStore = create<StoreType>((set, get) => ({
       else set({ flightStatus: undefined });
     }
   },
+
+  //FLIGHTSEARCH
   flightSearch: null,
   flightSearchNoDate: null,
   arrivalFlightSearch: null,
@@ -374,6 +421,7 @@ const useStore = create<StoreType>((set, get) => ({
     }
   },
 
+  //OUTBOUNDBOOKING
   outboundBooking: null,
   selectOutboundFlight: (ticket) => {
     set({ outboundBooking: { tickets: [ticket] } });

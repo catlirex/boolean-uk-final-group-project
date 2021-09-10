@@ -1,4 +1,4 @@
-import React, { useEffect } from "react";
+import React, { SyntheticEvent, useEffect } from "react";
 import styled from "styled-components";
 import logo from "../assets/booleanAir_logo.png";
 import { APP_COLOR } from "../consistent";
@@ -6,10 +6,14 @@ import { withStyles } from "@material-ui/core/styles";
 import Button from "@material-ui/core/Button";
 import ButtonGroup from "@material-ui/core/ButtonGroup";
 import useStore from "../store";
-import { Link } from "react-router-dom";
-import { ArrowLeftTwoTone } from "@material-ui/icons";
-import DepartureStaff from "../Component/departureStaff";
+import { Link, useHistory } from "react-router-dom";
 import AirportList from "../Component/AirportList";
+import DepartureStaff from "../Component/DepartureStaff";
+import ArrivalStaff from "../Component/ArrivalStaff";
+import PassengersFlight from "../Component/PassengersFlight";
+import CheckinCounter from "../Component/CheckinCounter";
+import OnboardCounter from "../Component/OnboardCounter";
+import { isFunctionLike } from "typescript";
 
 const StyledPage = styled.div`
   display: grid;
@@ -35,6 +39,13 @@ const StyledNav = styled.nav`
   .navList {
     border-radius: 15px;
   }
+`;
+
+const StyledWelcome = styled.h3`
+  font-family: arial;
+  font-size: 20px;
+  color: ${APP_COLOR.pink};
+  align-item: center;
 `;
 
 const StyledList = styled.li`
@@ -98,12 +109,16 @@ export const PinkButton = withStyles(() => ({
 }))(Button);
 
 export default function StaffHomePage() {
-  const departureFlightList = useStore((state) => state.departureFlightList);
+  const chooseAirport = useStore((state) => state.chooseAirport);
+  const setChooseAirport = useStore((state) => state.setChooseAirport);
+  let departureFlightList = useStore((state) => state.departureFlightList);
   const setDepartureFlightList = useStore(
     (state) => state.setDepartureFlightList
   );
-
+  let staffFunction = useStore((state) => state.staffFunction);
+  const setStaffFunction = useStore((state) => state.setStaffFunction);
   const logOut = useStore((state) => state.logOut);
+
   return (
     <StyledPage>
       <StyledHeader>
@@ -125,18 +140,61 @@ export default function StaffHomePage() {
             aria-label="text primary button group"
             className="buttonGroup"
           >
-            <NavButton className="navList">Crew number Base Airport</NavButton>
-            <NavButton className="navList">View Departure list</NavButton>
-            <NavButton className="navList">View Arrival list</NavButton>
-            <NavButton className="navList">Checkin counter</NavButton>
-            <NavButton className="navList">Onboard counter</NavButton>
+            <NavButton
+              onClick={() => {
+                setStaffFunction("airportList");
+              }}
+              className="navList"
+            >
+              Crew number Base Airport
+            </NavButton>
+            <NavButton
+              onClick={() => {
+                setStaffFunction("departureList");
+              }}
+              className="navList"
+            >
+              View Departure list
+            </NavButton>
+            <NavButton
+              onClick={() => {
+                setStaffFunction("arrivalList");
+              }}
+              className="navList"
+            >
+              View Arrival list
+            </NavButton>
+            <NavButton
+              onClick={() => {
+                setStaffFunction("checkinCounter");
+              }}
+              className="navList"
+            >
+              Checkin counter
+            </NavButton>
+            <NavButton
+              onClick={() => {
+                setStaffFunction("onboardCounter");
+              }}
+              className="navList"
+            >
+              Onboard counter
+            </NavButton>
           </ButtonGroup>
         </ul>
       </StyledNav>
       <StyledMain>
         <StyledList>
           <ul>
-            <AirportList />
+            {staffFunction === "" ? (
+              <StyledWelcome>Welcome to the staff Page</StyledWelcome>
+            ) : null}
+            {staffFunction === "airportList" ? <AirportList /> : null}
+            {staffFunction === "departureList" ? <DepartureStaff /> : null}
+            {staffFunction === "arrivalList" ? <ArrivalStaff /> : null}
+            {staffFunction === "passengersList" ? <PassengersFlight /> : null}
+            {staffFunction === "checkinCounter" ? <CheckinCounter /> : null}
+            {staffFunction === "onboardCounter" ? <OnboardCounter /> : null}
           </ul>
         </StyledList>
       </StyledMain>

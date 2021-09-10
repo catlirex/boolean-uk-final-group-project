@@ -12,20 +12,7 @@ type ScheduleFlight = {
   airportCode: FlightNumberType["departureAirportId"];
 };
 
-// export type ScheduledFlightList = {
-//     date: number;
-//     time: string;
-//     economicPrice: number;
-//     businessPrice: number;
-//     firstClassPrice: number;
-//     status: FlightStatusType;
-//     gateNumber: string;
-//     flightNumberId: string;
-//     flightNumber: FlightNumberType;(departureAirportId)
-//     passengers?: [];
-//   };
-
-function DepartureStaff() {
+function ArrivalStaff() {
   // CURRENT DATE
   const myCurrentDate = new Date();
   const date =
@@ -36,24 +23,26 @@ function DepartureStaff() {
     myCurrentDate.getFullYear();
   const newCurrentDate = date;
 
-  const departureFlightList = useStore((state) => state.departureFlightList);
-  const setDepartureFlightList = useStore(
-    (state) => state.setDepartureFlightList
-  );
+  const arrivalFlightList = useStore((state) => state.arrivalFlightList);
+  const setArrivalFlightList = useStore((state) => state.setArrivalFlightList);
   const setStaffFunction = useStore((state) => state.setStaffFunction);
+
+  useEffect(() => {
+    setArrivalFlightList();
+  }, []);
 
   return (
     <div className="depart">
-      <h2>Depart List</h2>
+      <h2>Arrival List</h2>
       <p>Date : {newCurrentDate}</p>
       <div className="card">
-        {departureFlightList?.map((departure) => {
+        {arrivalFlightList?.map((arrival) => {
           return (
             <li>
-              <h3>{departure.flightNumberId}</h3>
-              <h3>{departure.gateNumber}</h3>
-              <h3>{departure.time}</h3>
-              <h3>{departure.status}</h3>
+              <h3>{arrival.flightNumberId}</h3>
+              <h3>{arrival.gateNumber}</h3>
+              <h3>{arrival.time}</h3>
+              <h3>{arrival.status}</h3>
               <PinkButton
                 onClick={() => {
                   setStaffFunction("passengersList");
@@ -69,4 +58,4 @@ function DepartureStaff() {
   );
 }
 
-export default DepartureStaff;
+export default ArrivalStaff;
