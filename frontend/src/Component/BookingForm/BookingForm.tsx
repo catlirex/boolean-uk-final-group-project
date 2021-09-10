@@ -76,7 +76,7 @@ const BookingForm = () => {
   const outboundBooking = useStore((state) => state.outboundBooking);
   const inboundBooking = useStore((state) => state.inboundBooking);
   const loggedInUser = useStore((state) => state.loggedInUser);
-
+  console.log("inbound booking", inboundBooking);
   const ExtraLuggage = () => {
     let num = null;
     if (numberOf30KgLuggage !== 0) {
@@ -172,15 +172,11 @@ const BookingForm = () => {
     console.log("Inbound", inbooking);
     // }
 
-    // if (numberOfPassangers !== 0) {
-    //   for (let i = 0; i < numberOfPassangers; i++) {
-    //     inbooking.tickets.push({
-    //       // class: ,
-    //       // scheduledFlightId:
-    //       //   inboundBooking?.tickets.TicketType.scheduledFlightId,
-    //     });
-    //   }
-    // }
+    if (numberOfPassangers !== 0) {
+      for (let i = 0; i < numberOfPassangers; i++) {
+        // inbooking.tickets.push(inboundBooking?.tickets[0]);
+      }
+    }
   };
 
   console.log(handleSubmit());

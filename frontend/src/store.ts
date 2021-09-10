@@ -54,6 +54,10 @@ export type TicketType = {
   status?: string;
 };
 
+export type SingleTicketType = {
+  class: string;
+  scheduledFlightId: number;
+};
 type BookExtraLuggageType = {
   bookingId: number;
   extraLuggageId: number;
@@ -69,7 +73,7 @@ type BookExtraLuggageType = {
 export type UserBookingType = {
   id: number;
   userId: number;
-  tickets: TicketType[];
+  tickets: TicketType[] | SingleTicketType;
   BookExtraLuggage: BookExtraLuggageType[];
 };
 
@@ -157,7 +161,7 @@ type StoreType = {
     deteArrival?: number
   ) => void;
   outboundBooking: null | newBookingType;
-  inboundBooking: null | newBookingType;
+  inboundBooking: null | newBookingType | undefined;
   selectOutboundFlight: (arg: TicketType) => void;
   selectInboundFlight: (arg: TicketType) => void;
 };
