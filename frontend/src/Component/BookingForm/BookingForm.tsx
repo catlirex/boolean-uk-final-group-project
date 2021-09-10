@@ -87,7 +87,7 @@ const BookingForm = () => {
   const [numberOf20KgLuggage, setNumberOf20KgLuggage] = useState(0);
   const [numberOf30KgLuggage, setNumberOf30KgLuggage] = useState(0);
   let [totalPrice, setTotalPrice] = useState(0);
-
+  const getUserBooking = useStore((state) => state.getUserBooking);
   const outboundBooking = useStore((state) => state.outboundBooking);
   const inboundBooking = useStore((state) => state.inboundBooking);
   const loggedInUser = useStore((state) => state.loggedInUser);
@@ -153,11 +153,7 @@ const BookingForm = () => {
     const inbooking: Bookings = {
       userId: loggedInUser?.id,
       bookExtraLuggage: [],
-      tickets: [
-        { class: "econ", scheduledFlightId: 123 },
-        { class: "econ", scheduledFlightId: 123 },
-        { class: "econ", scheduledFlightId: 123 },
-      ],
+      tickets: [],
     };
 
     if (numberOf10KgLuggage) {
@@ -190,14 +186,30 @@ const BookingForm = () => {
       }
     }
     // const target = e.target as HTMLFormElement;
+    if (outboundBooking) {
+      fetch(`http://localhost:3000/bookings`, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(outbooking),
+      })
+        .then((res) => res.json())
+        .then((data) => console.log(data));
+    }
+    if (inboundBooking) {
+      fetch(`http://localhost:3000/bookings`, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(outbooking),
+      })
+        .then((res) => res.json())
+        .then((data) => console.log(data));
+    }
 
-    fetch(`http://localhost:3000/booking`, {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify({ newBooking: outbooking }),
-    }).then((res) => console.log(res.json()));
+    history.push("/mybooking");
   };
 
   return (
@@ -323,11 +335,7 @@ const BookingForm = () => {
               <Typography>Total Price ${totalPrice.toFixed(2)}</Typography>
             </Grid>
           </Grid>
-          <SquareButton
-            variant="contained"
-            type="submit"
-            onClick={() => history.push("/myBooking")}
-          >
+          <SquareButton variant="contained" type="submit">
             PayMent
           </SquareButton>
         </form>

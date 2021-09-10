@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import styled from "styled-components";
 import { APP_COLOR } from "../../consistent";
 import FlightIcon from "@material-ui/icons/Flight";
@@ -111,6 +111,7 @@ export const PinkButton = withStyles(() => ({
 }))(Button);
 
 const SearchBarComponent = () => {
+  const resetSearch = useStore((state) => state.resetSearch);
   const history = useHistory();
   const [departureDate, setDepartureDate] = React.useState<
     Date | MaterialUiPickersDate
@@ -123,11 +124,13 @@ const SearchBarComponent = () => {
 
   const [showParaDepature, setshowParaDepature] = useState<boolean>(false);
   const [showParaArrival, setshowParaArrival] = useState<boolean>(false);
-
   const airportList = useStore((state) => state.airportList);
-
   const flightSearch = useStore((state) => state.flightSearch);
   const searchFlightSeach = useStore((state) => state.searchFlightSeach);
+
+  useEffect(() => {
+    resetSearch();
+  }, []);
 
   // state change for search input
   const handleChangeArrival = (e: React.SyntheticEvent) => {

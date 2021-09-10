@@ -224,7 +224,7 @@ const useStore = create<StoreType>((set, get) => ({
     password: null,
   },
   setUserCredentials: (userCredentials) => set({ userCredentials }),
-  loggedInUser: { id: 30 },
+  loggedInUser: { id: 27 },
   setLoginUser: async (userCredentials) => {
     const loginUser = await fetch(`http://localhost:3000/login`, {
       method: "POST",
@@ -332,12 +332,14 @@ const useStore = create<StoreType>((set, get) => ({
   // USERBOOKING
   userBooking: null,
   getUserBooking: async () => {
+    console.log("user:", get().loggedInUser);
+
     if (!get().loggedInUser) return;
     else {
       const userBookingFromServer = await fetch(
         `http://localhost:3000/bookings/user/${get().loggedInUser?.id}`
       ).then((res) => res.json());
-      console.log(userBookingFromServer);
+      console.log("userBookingFromServer", userBookingFromServer);
       if (userBookingFromServer.length)
         set({ userBooking: userBookingFromServer });
       else set({ flightStatus: undefined });

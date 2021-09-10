@@ -51,7 +51,10 @@ export default function MyBookingPage() {
 
   useEffect(() => {
     getUserBooking();
-  }, []);
+  }, [loggedInUser]);
+
+  console.log("userBooking", userBooking);
+
   return (
     <StyledMain>
       <h1>My Booking</h1>
