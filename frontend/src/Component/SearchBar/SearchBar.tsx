@@ -11,7 +11,6 @@ import Button from "@material-ui/core/Button";
 
 import { MaterialUiPickersDate } from "@material-ui/pickers/typings/date";
 
-import SimpleSelect from "./SearchBarTravelSelect";
 import useStore from "../../store";
 import { useHistory } from "react-router-dom";
 
@@ -22,7 +21,7 @@ const StyledSearchBarWrapper = styled.section`
   background-position: center;
   background-repeat: no-repeat;
   background-size: cover;
-  height: 100%;
+  height: 100vh;
   min-height: 25rem;
   overflow: hidden;
   width: 100%;
