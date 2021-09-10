@@ -127,7 +127,6 @@ export default function ArrivalResultCard({ data }: Props) {
     });
     setPriceDisplayed(!priceDisplayed);
   };
-  console.log("inboundBooking", inboundBooking);
 
   if (
     inboundBooking &&
