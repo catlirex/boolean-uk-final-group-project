@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, SyntheticEvent } from "react";
 import useStore from "../../store";
 import { useHistory } from "react-router";
 import Typography from "@material-ui/core/Typography";
@@ -122,17 +122,13 @@ const BookingForm = () => {
     }
   };
 
-  const handleSubmit = () => {
-    // OutBound Bookings
-    // if (outboundBooking?.tickets || outboundBooking?.bookExtraLuggage) {
+  const handleSubmit = (e: SyntheticEvent) => {
+    e.preventDefault();
+
     const outbooking: Bookings = {
       userId: loggedInUser?.id,
       bookExtraLuggage: [],
-      tickets: [
-        { class: "econ", scheduledFlightId: 123 },
-        { class: "econ", scheduledFlightId: 123 },
-        { class: "econ", scheduledFlightId: 123 },
-      ],
+      tickets: [],
     };
 
     if (numberOf10KgLuggage) {
@@ -153,10 +149,7 @@ const BookingForm = () => {
         extraLuggageId: 3,
       });
     }
-    console.log("Outbound", outbooking);
-    // }
-    // Inbound Bookings
-    // if (inboundBooking?.bookExtraLuggage || inboundBooking?.tickets) {
+
     const inbooking: Bookings = {
       userId: loggedInUser?.id,
       bookExtraLuggage: [],
@@ -185,17 +178,27 @@ const BookingForm = () => {
         extraLuggageId: 3,
       });
     }
-    console.log("Inbound", inbooking);
-    // }
 
-    if (numberOfPassangers !== 0) {
-      for (let i = 0; i < numberOfPassangers; i++) {
-        inbooking.tickets.push(inboundBooking?.tickets[0]);
+    if (inboundBooking) {
+      if (numberOfPassangers !== 0) {
+        for (let i = 0; i < numberOfPassangers; i++) {
+          console.log("inside inbookin", inbooking.tickets);
+          console.log("inside inboundbooking", inboundBooking.tickets);
+          outbooking.tickets.push(inboundBooking?.tickets[0]);
+          console.log("after push", inbooking.tickets);
+        }
       }
     }
-  };
+    // const target = e.target as HTMLFormElement;
 
-  console.log(handleSubmit());
+    fetch(`http://localhost:3000/booking`, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({ newBooking: outbooking }),
+    }).then((res) => console.log(res.json()));
+  };
 
   return (
     <Container component="main" maxWidth="sm">
@@ -315,19 +318,20 @@ const BookingForm = () => {
               </Grid>
             </Grid>
           </Grid>
+          <Grid className={classes.priceWrapper}>
+            <Grid>
+              <Typography>Total Price ${totalPrice.toFixed(2)}</Typography>
+            </Grid>
+          </Grid>
+          <SquareButton
+            variant="contained"
+            type="submit"
+            onClick={() => history.push("/myBooking")}
+          >
+            PayMent
+          </SquareButton>
         </form>
       </div>
-      <Grid className={classes.priceWrapper}>
-        <Grid>
-          <Typography>Total Price ${totalPrice.toFixed(2)}</Typography>
-        </Grid>
-        <SquareButton
-          variant="contained"
-          onClick={() => history.push("/myBooking")}
-        >
-          PayMent
-        </SquareButton>
-      </Grid>
     </Container>
   );
 };
